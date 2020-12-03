@@ -95,7 +95,7 @@ class _HcGardenAppState extends State<HcGardenApp> {
               title: 'HC Garden',
               theme: themeNotifier.value ? darkThemeData : themeData,
               onGenerateRoute: (settings) {
-                if (settings.isInitialRoute) {
+                if (settings.name == '/') {
                   return PageRouteBuilder(
                     pageBuilder: (context, _, secondaryAnimation) {
                       final fadeOut = secondaryAnimation.drive(Tween(

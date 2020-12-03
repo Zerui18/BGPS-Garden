@@ -46,7 +46,7 @@ class _ExploreBodyState extends State<ExploreBody> {
         Navigator(
           key: context.provide<AppNotifier>(listen: false).navigatorKey,
           onGenerateRoute: (settings) {
-            if (settings.isInitialRoute) return initialRoute;
+            if (settings.name == '/') return initialRoute;
             return null;
           },
           observers: _navigatorObservers,
