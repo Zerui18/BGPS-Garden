@@ -49,6 +49,9 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    rootBundle.loadString('assets/data/mapStyle.json').then((string) {
+      mapStyle = string;
+    });
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -98,7 +101,7 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
                 top: MediaQuery.of(context).padding.top,
               ),
               myLocationEnabled: true,
-              mapType: mapNotifier.mapType,
+              //mapType: mapNotifier.mapType,
               rotateGesturesEnabled: false,
               onMapCreated: _onMapCreated,
               onCameraMove: (position) {

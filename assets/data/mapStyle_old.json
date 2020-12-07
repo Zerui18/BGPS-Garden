@@ -1,0 +1,85 @@
+[
+    {
+      "featureType": "landscape.man_made",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "saturation": 20
+        },
+        {
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "featureType": "landscape.man_made",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "lightness": -15
+        }
+      ]
+    },
+    {
+      "featureType": "poi.school",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "saturation": 20
+        },
+        {
+          "lightness": 30
+        }
+      ]
+    },
+    {
+      "featureType": "poi.school",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+          "color": "#009688"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.school",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#009688"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.business",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.government",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.place_of_worship",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.sports_complex",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    }
+  ]

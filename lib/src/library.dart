@@ -10,6 +10,7 @@ export 'package:flutter/gestures.dart';
 export 'package:flutter/material.dart';
 export 'package:flutter/physics.dart';
 export 'package:flutter/services.dart';
+export 'package:flutter/services.dart' show rootBundle;
 
 export 'package:firebase_database/firebase_database.dart';
 export 'package:google_maps_flutter/google_maps_flutter.dart';

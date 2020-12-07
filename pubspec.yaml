@@ -60,6 +60,7 @@ flutter:
     - assets/images/irs.png
     - assets/images/app_logo/app_logo.png
     - assets/images/screenshots/homepage.png
+    - assets/data/mapStyle.json
   fonts:
     - family: Manrope
       fonts:
