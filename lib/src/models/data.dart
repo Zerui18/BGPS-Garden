@@ -67,7 +67,8 @@ class Entity implements Comparable {
   /// Returns the level of relevance that the [Entity] matches the `searchTerm`
   int matches(String searchTerm) {
     if (searchTerm.isEmpty || searchTerm == '*') return 3;
-    if (Search.matches(name, searchTerm)) return 2;
+    if (Search.matches(name, searchTerm))
+      return 2;
     else if (Search.matches(sciName, searchTerm)) return 1;
     return 0;
   }
@@ -168,6 +169,7 @@ class TrailLocation {
       }
       entityPositions.sort((a, b) => a.left.compareTo(b.left));
     }
+
     return TrailLocation(
       key: key,
       name: data['title'],

@@ -147,9 +147,10 @@ class _MyHomePageState extends State<MyHomePage>
 
   /// Check if location permission is on
   void _checkPermission() async {
-    var granted = await _location.hasPermission();
+    var _perm = await _location.hasPermission();
+    var granted = (_perm == PermissionStatus.GRANTED);
     if (!granted) {
-      granted = await _location.requestPermission();
+      _perm = await _location.requestPermission();
     }
     _mapNotifier.permissionEnabled = granted;
     if (granted) {
@@ -352,7 +353,9 @@ class _MyHomePageState extends State<MyHomePage>
                             return CustomAnimatedSwitcher(
                               child: pageIndex == 0
                                   ? HistoryPage()
-                                  : pageIndex == 2 ? AboutPage() : child,
+                                  : pageIndex == 2
+                                      ? AboutPage()
+                                      : child,
                             );
                           },
                           child: MapWidget(),

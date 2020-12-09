@@ -1,77 +1,41 @@
 {
   "project_info": {
-    "project_number": "590763635317",
-    "firebase_url": "https://hc-garden-e79f3.firebaseio.com",
-    "project_id": "hc-garden-e79f3",
-    "storage_bucket": "hc-garden-e79f3.appspot.com"
+    "project_number": "678925505440",
+    "firebase_url": "https://ecogarden-e8bbb-default-rtdb.firebaseio.com",
+    "project_id": "ecogarden-e8bbb",
+    "storage_bucket": "ecogarden-e8bbb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:590763635317:android:7bd2607396eb8d28077e3c",
+        "mobilesdk_app_id": "1:678925505440:android:b997425239c8b21901cac5",
         "android_client_info": {
-          "package_name": "com.example.bottom_sheet"
+          "package_name": "com.scs.ecogarden"
         }
       },
       "oauth_client": [
         {
-          "client_id": "590763635317-ml8n1lr08kpot52v229f4ekqj4ohcfi4.apps.googleusercontent.com",
+          "client_id": "678925505440-sp6nfidlad6s6v8oe9l1bedrohsv61l7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCvlJ0q8i9KLeeMcGIdhiEUSf50yOlgzN8"
+          "current_key": "AIzaSyC0Kcwj2sPPFJjhoQIz9m2SF0TxNlOpCpM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "590763635317-ml8n1lr08kpot52v229f4ekqj4ohcfi4.apps.googleusercontent.com",
+              "client_id": "678925505440-sp6nfidlad6s6v8oe9l1bedrohsv61l7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "590763635317-s4dbvuhvkse146p0ttvirs3uv6ioutor.apps.googleusercontent.com",
+              "client_id": "678925505440-po4arnncea72futqagjshv0mv8trqq0b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.hci.hcgarden"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:590763635317:android:f45340524d315681077e3c",
-        "android_client_info": {
-          "package_name": "com.hci.hcgarden"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "590763635317-ml8n1lr08kpot52v229f4ekqj4ohcfi4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCvlJ0q8i9KLeeMcGIdhiEUSf50yOlgzN8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "590763635317-ml8n1lr08kpot52v229f4ekqj4ohcfi4.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "590763635317-s4dbvuhvkse146p0ttvirs3uv6ioutor.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.hci.hcgarden"
+                "bundle_id": "com.scs.ecogarden"
               }
             }
           ]
