@@ -171,16 +171,9 @@ class _MapDataWidgetState extends State<MapDataWidget> {
     }
   }
 
-  Marker _generateMarker({
-    BuildContext context,
-    TrailLocation location,
-    String image,
-  }) {
+  Marker _generateMarker({BuildContext context, TrailLocation location}) {
     final mapNotifier = Provider.of<MapNotifier>(context, listen: false);
     final markerId = MarkerId('${location.key.trailKey.id} ${location.key.id}');
-    BitmapDescriptor myIcon;
-    BitmapDescriptor.fromAssetImage(ImageConfiguration(), image)
-        .then((onValue) => myIcon = onValue);
     return Marker(
       onTap: () {
         mapNotifier.activeMarker = markerId;
@@ -194,7 +187,9 @@ class _MapDataWidgetState extends State<MapDataWidget> {
           _markerOnTap(context: context, location: location);
         },
       ),
-      icon: myIcon,
+      icon: mapNotifier.markerIcons[location.key.trailKey.id],
+      /*Right now we are sticking with trail colors.
+      Logistically speaking an image per map marker is insane and unviable.*/
     );
   }
 
@@ -206,7 +201,6 @@ class _MapDataWidgetState extends State<MapDataWidget> {
         mapMarkers[MarkerId('${trailKey.id} ${key.id}')] = _generateMarker(
           context: context,
           location: value,
-          image: value.image,
         );
       });
     });
