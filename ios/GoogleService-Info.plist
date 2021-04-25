@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>590763635317-s4dbvuhvkse146p0ttvirs3uv6ioutor.apps.googleusercontent.com</string>
+	<string>193332706444-rp7tn8bldc70krdlfc7bg5nq0ttil7c9.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.590763635317-s4dbvuhvkse146p0ttvirs3uv6ioutor</string>
+	<string>com.googleusercontent.apps.193332706444-rp7tn8bldc70krdlfc7bg5nq0ttil7c9</string>
 	<key>API_KEY</key>
-	<string>AIzaSyARlmkV7pTdcOT3Uei-l3bQwIJZka7oBYs</string>
+	<string>AIzaSyDJBj7FwmQbdx9PFY2O1Kcj4otIhP6YgIg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>590763635317</string>
+	<string>193332706444</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.hci.hcgarden</string>
+	<string>com.scs.ecogarden</string>
 	<key>PROJECT_ID</key>
-	<string>hc-garden-e79f3</string>
+	<string>ecogarden-7e42f</string>
 	<key>STORAGE_BUCKET</key>
-	<string>hc-garden-e79f3.appspot.com</string>
+	<string>ecogarden-7e42f.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:590763635317:ios:4b3790f6709ea8fe077e3c</string>
-	<key>DATABASE_URL</key>
-	<string>https://hc-garden-e79f3.firebaseio.com</string>
+	<string>1:193332706444:ios:0ff35053284dc1b36f4fa9</string>
 </dict>
 </plist>

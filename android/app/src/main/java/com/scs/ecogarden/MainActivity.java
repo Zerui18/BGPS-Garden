@@ -1,4 +1,4 @@
-package com.hci.hcgarden;
+package com.scs.ecogarden;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
