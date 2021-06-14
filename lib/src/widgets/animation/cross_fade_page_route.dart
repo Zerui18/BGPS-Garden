@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 /// A simple cross-fade animation between 2 screens, with some subtle scaling.
 ///

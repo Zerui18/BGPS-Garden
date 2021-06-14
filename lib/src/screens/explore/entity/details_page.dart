@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 class EntityDetailsPage extends StatefulWidget {
   final EntityKey entityKey;
@@ -33,10 +33,10 @@ class _EntityDetailsPageState extends State<EntityDetailsPage> {
     super.didChangeDependencies();
     if (!_init) {
       context.provide<AppNotifier>(listen: false).updateScrollController(
-        context: context,
-        dataKey: widget.entityKey,
-        scrollController: _scrollController,
-      );
+            context: context,
+            dataKey: widget.entityKey,
+            scrollController: _scrollController,
+          );
       _init = true;
     }
   }

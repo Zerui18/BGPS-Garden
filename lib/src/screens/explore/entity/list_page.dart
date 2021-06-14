@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 class EntityListPage extends StatelessWidget {
   final bool isFlora;

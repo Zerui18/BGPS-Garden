@@ -1,8 +1,8 @@
-# HC Garden Documentation
+# BGPS Garden Documentation
 
 ## Introduction
 
-The main Software Development Kit (SDK) used in the development of HC Garden is **Flutter**, which uses **Dart** as its object-oriented development language. 
+The main Software Development Kit (SDK) used in the development of BGPS Garden is **Flutter**, which uses **Dart** as its object-oriented development language. 
 
 For official documentation on Flutter and Dart, read: <br>
 Flutter: https://flutter.dev/docs <br>

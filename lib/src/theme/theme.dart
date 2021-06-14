@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 class ThemeNotifier extends ValueNotifier<bool> {
   ThemeNotifier(bool value) : super(value);
@@ -78,7 +78,7 @@ const TextTheme textTheme = TextTheme(
     fontSize: 32,
     fontWeight: FontWeight.bold,
   ),
-  // 'Explore HC Garden' and entity name in details page
+  // 'Explore BGPS Garden' and entity name in details page
   display1: TextStyle(
     fontSize: 20,
     height: 1.2,

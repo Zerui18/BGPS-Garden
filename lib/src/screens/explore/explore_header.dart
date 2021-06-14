@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 import 'dart:io' show Platform;
 
 // TODO: Cater to smaller screens by removing/shifting some elements of the ExploreHeader, like the app logo
@@ -64,8 +64,8 @@ class ExploreHeader extends StatelessWidget {
                   end: (24 + Sizes.hLogoHeight) / 12,
                 ).animate(animTween.animate(animation)),
                 child: Text(
-                  'Explore HC Garden',
-                  style: Theme.of(context).textTheme.display1.copyWith(
+                  'Explore BGPS Garden',
+                  style: Theme.of(context).textTheme.headline4.copyWith(
                         height: Sizes.hHeadingHeight / 20,
                       ),
                 ),
@@ -108,7 +108,7 @@ class AppLogo extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Image.asset(
-            'assets/images/hci.png',
+            'assets/images/bgps-logo.jpg',
             height: Sizes.hLogoHeight,
           ),
           const SizedBox(
@@ -118,19 +118,19 @@ class AppLogo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Hwa Chong'.toUpperCase(),
+                'Bedok Green'.toUpperCase(),
                 style: TextStyle(
                   color: Theme.of(context).hintColor,
+                  // letterSpacing: 1,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   height: 1,
                 ),
               ),
               Text(
-                'Institution'.toUpperCase(),
+                'Primary School'.toUpperCase(),
                 style: TextStyle(
                   color: Theme.of(context).hintColor,
-                  letterSpacing: 0.15,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   height: 1,
@@ -160,7 +160,7 @@ class TrailButtonsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _trails = ['Kah Kee\nTrail', 'Kong Chian\nTrail', 'Jing Xian\nTrail'];
+    const sections = ['Section A', 'Section B', 'Section C'];
     final _colors = [
       Colors.lightBlue,
       Colors.pink,
@@ -178,11 +178,11 @@ class TrailButtonsRow extends StatelessWidget {
         padding: const EdgeInsets.only(left: 8),
         child: Row(
           children: [
-            for (int i = 0; i < _trails.length; i++)
+            for (int i = 0; i < sections.length; i++)
               TrailButton(
                 color: _colors[i],
                 textColor: _textColors[i],
-                trailName: _trails[i],
+                trailName: sections[i],
                 onPressed: () {
                   final trailKey = TrailKey(id: 2 - i);
                   context.provide<AppNotifier>(listen: false).push(
@@ -239,7 +239,7 @@ class TrailButton extends StatelessWidget {
                   ? darkThemeData.copyWith(
                       buttonColor: Color(0xFF383838),
                       textTheme: TextTheme(
-                        body1: textStyle.copyWith(
+                        bodyText2: textStyle.copyWith(
                           color: textColor,
                         ),
                       ),
@@ -247,7 +247,7 @@ class TrailButton extends StatelessWidget {
                   : themeData.copyWith(
                       buttonColor: color,
                       textTheme: TextTheme(
-                        body1: textStyle.copyWith(
+                        bodyText2: textStyle.copyWith(
                           color: Colors.white,
                         ),
                       ),
@@ -271,7 +271,7 @@ class TrailButton extends StatelessWidget {
                 child: Text(
                   trailName.toUpperCase(),
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.body1,
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
               ),
               onPressed: onPressed,
@@ -357,10 +357,12 @@ class FloraFaunaTabBar extends StatelessWidget {
                             child: Text(
                               i == 0 ? 'FLORA' : 'FAUNA',
                               textAlign: TextAlign.center,
-                              style:
-                                  Theme.of(context).textTheme.headline.copyWith(
-                                        color: Colors.white,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  .copyWith(
+                                    color: Colors.white,
+                                  ),
                             ),
                           ),
                           onPressed: () {

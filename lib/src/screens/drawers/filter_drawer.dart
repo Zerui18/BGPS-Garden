@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 class FilterDrawer extends StatefulWidget {
   const FilterDrawer({Key key}) : super(key: key);
@@ -55,8 +55,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 28, 16, 12),
                       child: Text(
-                        'Trails',
-                        style: Theme.of(context).textTheme.subtitle,
+                        'Sections',
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                     ),
                     Selector<FilterNotifier, List<TrailKey>>(
@@ -78,7 +78,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                               }),
                               title: Text(
                                 trailEntry.value,
-                                style: Theme.of(context).textTheme.body1,
+                                style: Theme.of(context).textTheme.bodyText2,
                               ),
                               checkColor: Theme.of(context).canvasColor,
                               onChanged: (value) {
@@ -161,7 +161,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                                             strokeWidth: 2,
                                           ),
                                         );
-                                      } else if (value != DistanceSortingState.none) {
+                                      } else if (value !=
+                                          DistanceSortingState.none) {
                                         child = Text(
                                           value ==
                                                   DistanceSortingState

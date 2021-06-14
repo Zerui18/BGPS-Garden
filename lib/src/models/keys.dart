@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 /// Data Key is used for the id of an [Entity], a [Trail] or a [TrailLocation].
 /// Used as an argument when pushing routes in AppNotifier.

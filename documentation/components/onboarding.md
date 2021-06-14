@@ -2,7 +2,7 @@
 
 ## Introduction
 
-As with most onboarding experiences, the onboarding pages have basically been hard-coded, so most the code will be left for the reader to figure out. Still, this document presents the main concepts behind the code for the onboarding experience in HC Garden. 
+As with most onboarding experiences, the onboarding pages have basically been hard-coded, so most the code will be left for the reader to figure out. Still, this document presents the main concepts behind the code for the onboarding experience BGPS Garden. 
 
 There are 6 pages in total, each of which has either static and dynamic components, or both. To layer the components (which are widgets) over one another, a [stack](https://api.flutter.dev/flutter/widgets/Stack-class.html) is used. 
 

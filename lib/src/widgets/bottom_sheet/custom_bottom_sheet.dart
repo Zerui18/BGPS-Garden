@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 // Returns an element from the sorted list which is closest to the given value
 double closestValue(

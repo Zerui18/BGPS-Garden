@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 export 'animation/cross_fade_page_route.dart';
 export 'animation/custom_animation_switcher.dart';
@@ -46,7 +46,8 @@ class InfoRow extends StatelessWidget {
         placeholderColor: Theme.of(context).dividerColor,
       ),
     );
-    final bottomSheetNotifier = context.provide<BottomSheetNotifier>(listen: false);
+    final bottomSheetNotifier =
+        context.provide<BottomSheetNotifier>(listen: false);
     return InkWell(
       onTap: tapToAnimate
           ? () {

@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 // todo:
 // Make images easier to zoom
@@ -134,7 +134,8 @@ class ImageGallery extends StatelessWidget {
                                 bottom: MediaQuery.of(context).padding.bottom,
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   IconButton(
                                     icon: const Icon(Icons.arrow_back),

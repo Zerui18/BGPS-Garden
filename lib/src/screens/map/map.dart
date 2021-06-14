@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 class MapWidget extends StatefulWidget {
   const MapWidget({Key key}) : super(key: key);
@@ -87,32 +87,24 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final mapNotifier = Provider.of<MapNotifier>(context);
+    // final mapNotifier = Provider.of<MapNotifier>(context);
     return CustomAnimatedSwitcher(
       fadeIn: true,
-      child: mapNotifier.markers?.isEmpty ?? true
-          ? DecoratedBox(
-              decoration: BoxDecoration(
-                color: Theme.of(context).dividerColor,
-              ),
-            )
-          : GoogleMap(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top,
-              ),
-              myLocationEnabled: true,
-              //mapType: mapNotifier.mapType,
-              rotateGesturesEnabled: false,
-              onMapCreated: _onMapCreated,
-              onCameraMove: (position) {
-                mapNotifier.cameraPosition = position;
-              },
-              initialCameraPosition: _initialCameraPosition,
-              markers: mapNotifier.markers.values.toSet(),
-              polygons: mapNotifier.mapType == MapType.hybrid
-                  ? null
-                  : mapNotifier.polygons,
-            ),
+      child: SafeArea(
+          child: InteractiveViewer(
+              panEnabled: true,
+              minScale: 1.0,
+              maxScale: 2,
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: AssetImage('assets/images/map_placeholder.png'),
+                        alignment: Alignment.topCenter),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+              ))),
     );
   }
 }

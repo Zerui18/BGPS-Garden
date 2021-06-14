@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key key}) : super(key: key);
@@ -75,7 +75,7 @@ class _AboutPageState extends State<AboutPage>
                         opacity: opacity,
                         child: Text(
                           'About',
-                          style: Theme.of(context).textTheme.display2,
+                          style: Theme.of(context).textTheme.headline3,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -228,7 +228,7 @@ class __DropdownWidgetState extends State<_DropdownWidget>
                 ),
                 Text(
                   widget.dropdown.title,
-                  style: Theme.of(context).textTheme.subtitle,
+                  style: Theme.of(context).textTheme.subtitle2,
                 ),
               ],
             ),

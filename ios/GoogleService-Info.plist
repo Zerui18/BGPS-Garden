@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>193332706444-rp7tn8bldc70krdlfc7bg5nq0ttil7c9.apps.googleusercontent.com</string>
+	<string>791973546893-rhuu27ilv3aia1tpn71gp2hcv2g01one.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.193332706444-rp7tn8bldc70krdlfc7bg5nq0ttil7c9</string>
+	<string>com.googleusercontent.apps.791973546893-rhuu27ilv3aia1tpn71gp2hcv2g01one</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDJBj7FwmQbdx9PFY2O1Kcj4otIhP6YgIg</string>
+	<string>AIzaSyDh-UVUxeH71RYmdgiVcwVPguZ3-fMHuFc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>193332706444</string>
+	<string>791973546893</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.scs.ecogarden</string>
+	<string>com.hci.bgpsgarden</string>
 	<key>PROJECT_ID</key>
-	<string>ecogarden-7e42f</string>
+	<string>bgps-garden-app</string>
 	<key>STORAGE_BUCKET</key>
-	<string>ecogarden-7e42f.appspot.com</string>
+	<string>bgps-garden-app.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:193332706444:ios:0ff35053284dc1b36f4fa9</string>
+	<string>1:791973546893:ios:f908b877a3fb5414bf4bc4</string>
+	<key>DATABASE_URL</key>
+	<string>https://bgps-garden-app-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

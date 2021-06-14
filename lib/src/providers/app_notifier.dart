@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 /// Information needed for the new screen to be displayed within the bottom sheet.
 /// Contains the name of the route, the [DataObject] it contains,

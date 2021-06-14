@@ -36,7 +36,11 @@ class _HcGardenAppState extends State<HcGardenApp> {
     });
 
     // Handle firebase data
-    _stream = FirebaseDatabase.instance.reference().onValue.map((event) {
+    _stream = FirebaseDatabase.instance
+        .reference()
+        .child("public")
+        .onValue
+        .map((event) {
       if (event.snapshot.value == null) {
         throw Exception('Value is empty!');
       }
@@ -92,7 +96,7 @@ class _HcGardenAppState extends State<HcGardenApp> {
                 ? darkThemeData.canvasColor
                 : themeData.canvasColor,
             child: MaterialApp(
-              title: 'HC Garden',
+              title: 'BGPS Garden',
               theme: themeNotifier.value ? darkThemeData : themeData,
               onGenerateRoute: (settings) {
                 if (settings.name == '/') {

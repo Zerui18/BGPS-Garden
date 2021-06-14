@@ -14,7 +14,7 @@ class Sizes {
   /// Height of the app logo/image
   static const hLogoHeight = 28.0;
 
-  /// Height of the text 'Explore HC Garden'
+  /// Height of the text 'Explore BGPS Garden'
   static const hHeadingHeight = 28.0;
 
   /// Height of the 3 trail buttons
@@ -60,5 +60,6 @@ class Sizes {
   static const kCollapsedHeight = kBottomBarHeight + kInfoRowHeight;
 
   /// Height of the image slider in [EntityDetailsPage]
-  static const kImageHeight = kBottomHeight - kInfoRowHeight - kBottomBarHeight - 16;
+  static const kImageHeight =
+      kBottomHeight - kInfoRowHeight - kBottomBarHeight - 16;
 }

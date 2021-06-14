@@ -1,5 +1,5 @@
 import 'dart:ui' as ui show Codec;
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 /// This is a mixture of [FileImage] and [NetworkImage].
 /// It will download the image from the url once, save it locally in the file system,
@@ -253,7 +253,7 @@ class _CustomImageState extends State<CustomImage> {
 /// This causes problems when the [CustomImage] tries to be as small as possible,
 /// and the resultant height and width does not actually represent the image,
 /// but the placeholder.
-/// 
+///
 /// Hence, we have a [_CustomFadeInImage] that mimics the implementation of
 /// [FadeInImage], without the need of a placeholder.
 

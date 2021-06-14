@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 // const northEastBound = const LatLng(1.328278, 103.807815);
 // const southWestBound = const LatLng(1.324095, 103.800954);

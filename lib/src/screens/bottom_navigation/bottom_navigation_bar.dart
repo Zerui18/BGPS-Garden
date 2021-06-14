@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 /// Bottom Navigation on the home screen for [HistoryPage], [MapWidget] and [AboutPage]
 class CustomBottomNavBar extends StatefulWidget {
@@ -279,7 +279,8 @@ class _NavbarButtonClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
-    final edgeLength = _radius - sqrt(_radius * _radius - size.height * size.height / 4);
+    final edgeLength =
+        _radius - sqrt(_radius * _radius - size.height * size.height / 4);
     path.moveTo(edgeLength, 0);
     path.arcToPoint(
       Offset(edgeLength, size.height),

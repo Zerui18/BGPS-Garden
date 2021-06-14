@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 /// [FilterNotifier] is a single [ChangeNotifier] that deals with anything
 /// involving searching, sorting & filtering of [Entity]s.

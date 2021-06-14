@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 import 'dart:collection';
 
 class FirebaseData {
@@ -17,9 +17,9 @@ class FirebaseData {
   });
 
   static const List<String> trailNames = [
-    'Jing Xian Trail',
-    'Kong Chian Trail',
-    'Kah Kee Trail',
+    'Section 1',
+    'Section 2',
+    'Section 3',
   ];
 
   static Entity getEntity({

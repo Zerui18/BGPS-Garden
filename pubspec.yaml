@@ -1,5 +1,5 @@
-name: hc_garden
-description: The official HC Garden app.
+name: bgps_garden
+description: The official BGPS Garden app.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -11,7 +11,7 @@ description: The official HC Garden app.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.2+4
+version: 0.0.1
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -56,7 +56,8 @@ flutter:
   assets:
     - assets/images/flora.jpg
     - assets/images/fauna.jpg
-    - assets/images/hci.png
+    - assets/images/bgps-logo.jpg
+    - assets/images/map_placeholder.png
     - assets/images/irs.png
     - assets/images/app_logo/app_logo.png
     - assets/images/screenshots/homepage.png

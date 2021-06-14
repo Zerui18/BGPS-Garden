@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 /// An [Entity] refers to any flora or fauna, and fauna may include any birds, butterflies, etc.
 ///

@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 class ExploreBody extends StatefulWidget {
   final TabController tabController;
@@ -30,7 +30,8 @@ class _ExploreBodyState extends State<ExploreBody> {
 
   @override
   Widget build(BuildContext context) {
-    final bottomSheetNotifier = context.provide<BottomSheetNotifier>(listen: false);
+    final bottomSheetNotifier =
+        context.provide<BottomSheetNotifier>(listen: false);
     final animation = bottomSheetNotifier.animation;
     final animTween = bottomSheetNotifier.animTween;
     final initialRoute = CrossFadePageRoute<void>(
@@ -83,7 +84,8 @@ class ExplorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottomSheetNotifier = context.provide<BottomSheetNotifier>(listen: false);
+    final bottomSheetNotifier =
+        context.provide<BottomSheetNotifier>(listen: false);
     final animation = bottomSheetNotifier.animation;
     final animTween = bottomSheetNotifier.animTween;
     final topPadding = MediaQuery.of(context).padding.top;

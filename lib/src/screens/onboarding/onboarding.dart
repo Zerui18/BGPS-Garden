@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -178,7 +178,7 @@ class _BottomBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).textTheme.display2.color;
+    final color = Theme.of(context).textTheme.headline3.color;
     return Theme(
       data: ThemeData(
         fontFamily: 'Manrope',
@@ -211,14 +211,13 @@ class _BottomBarButton extends StatelessWidget {
                   SizedBox(width: title == 'Skip' ? 6 : 4),
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.subtitle.copyWith(
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(
                           color: color,
                           height: 1.3,
                         ),
                   ),
                   SizedBox(width: 4),
-                  if (suffixIcon != null)
-                    suffixIcon,
+                  if (suffixIcon != null) suffixIcon,
                 ],
               ),
               onPressed: onTap,
@@ -246,10 +245,11 @@ class _OnboardingPageOne extends StatelessWidget {
             height: 216,
           ),
           Text(
-            'Welcome to\nHC Garden!',
-            style: Theme.of(context).textTheme.display2.copyWith(
+            'Welcome To\nBGPS Garden!',
+            style: Theme.of(context).textTheme.headline3.copyWith(
                   color: Theme.of(context).accentColor,
                 ),
+            textAlign: TextAlign.center,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -257,7 +257,7 @@ class _OnboardingPageOne extends StatelessWidget {
             children: <Widget>[
               RichText(
                 text: TextSpan(
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subtitle1,
                   children: [
                     TextSpan(text: 'Swipe to learn more'),
                     WidgetSpan(
@@ -293,11 +293,11 @@ class _OnboardingPageTwo extends StatelessWidget {
               children: <Widget>[
                 Text(
                   "This is the homepage!",
-                  style: Theme.of(context).textTheme.display1,
+                  style: Theme.of(context).textTheme.headline4,
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  "You'll see it everytime you open HC Garden.",
+                  "You'll see it everytime you open BGPS Garden.",
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -333,8 +333,8 @@ class _OnboardingPageSix extends StatelessWidget {
               height: 216,
             ),
             Text(
-              'Start your\nHC Garden\njourney now!',
-              style: Theme.of(context).textTheme.display2.copyWith(
+              'Start your\BGPS Garden\njourney now!',
+              style: Theme.of(context).textTheme.headline3.copyWith(
                     color: Theme.of(context).accentColor,
                     fontSize: 26,
                   ),
@@ -425,12 +425,12 @@ class _PageThreeText extends StatelessWidget {
         children: <Widget>[
           Text(
             "Explore our school",
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headline4,
             textAlign: TextAlign.center,
           ),
           Text(
             "with Google Maps!",
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headline4,
             textAlign: TextAlign.center,
           ),
         ],
@@ -550,7 +550,7 @@ class PageFourBottomSheet extends StatelessWidget {
             children: <Widget>[
               Text(
                 "Check out our nature trails,",
-                style: Theme.of(context).textTheme.display1,
+                style: Theme.of(context).textTheme.headline4,
                 textAlign: TextAlign.center,
               ),
               Text(
@@ -581,7 +581,7 @@ class _PageFiveText extends StatelessWidget {
         children: <Widget>[
           Text(
             "Customise your preferences",
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headline4,
             textAlign: TextAlign.center,
           ),
           Text(
@@ -597,7 +597,7 @@ class _PageFiveText extends StatelessWidget {
           ),
           Text(
             "Learn about our history",
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headline4,
             textAlign: TextAlign.center,
           ),
           Text(

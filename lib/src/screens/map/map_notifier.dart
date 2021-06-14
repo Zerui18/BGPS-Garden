@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 import 'dart:io' show Platform;
 
 class MapNotifier extends ChangeNotifier {
@@ -159,7 +159,7 @@ class MapNotifier extends ChangeNotifier {
     _animateToPoint(center, zoom, adjusted);
   }
 
-  /// Animate back to default map of HC Garden
+  /// Animate back to default map of BGPS Garden
   void animateBackToCenter({bool adjusted = false}) {
     if (!isDefaultMarkers) {
       greenMarkers = [];

@@ -1,41 +1,35 @@
 {
   "project_info": {
-    "project_number": "193332706444",
-    "project_id": "ecogarden-7e42f",
-    "storage_bucket": "ecogarden-7e42f.appspot.com"
+    "project_number": "791973546893",
+    "firebase_url": "https://bgps-garden-app-default-rtdb.firebaseio.com",
+    "project_id": "bgps-garden-app",
+    "storage_bucket": "bgps-garden-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:193332706444:android:c69e1a3ac1259efd6f4fa9",
+        "mobilesdk_app_id": "1:791973546893:android:555a039cd5a19024bf4bc4",
         "android_client_info": {
-          "package_name": "com.scs.ecogarden"
+          "package_name": "com.hci.bgpsgarden"
         }
       },
       "oauth_client": [
         {
-          "client_id": "193332706444-f0p1io92gpctqivuerbbsts1juvan2tu.apps.googleusercontent.com",
+          "client_id": "791973546893-5n0a0kkc4g2hvjpe318kqivk5806hdmt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCaca0Mbfl1LtV79Zau9UncgKXfO_QyRok"
+          "current_key": "AIzaSyCVTWuT4S1uuFW_xp3_XfdkXAC5kWXD0KI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "193332706444-f0p1io92gpctqivuerbbsts1juvan2tu.apps.googleusercontent.com",
+              "client_id": "791973546893-5n0a0kkc4g2hvjpe318kqivk5806hdmt.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "193332706444-q1bhsbrgjd5or8u7skpi8rlpse52s817.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.ssc.ecogarden"
-              }
             }
           ]
         }

@@ -1,4 +1,4 @@
-import 'package:hc_garden/src/library.dart';
+import 'package:bgps_garden/src/library.dart';
 
 class SettingsDrawer extends StatefulWidget {
   const SettingsDrawer({Key key}) : super(key: key);
