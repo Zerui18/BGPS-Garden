@@ -89,7 +89,7 @@ class _HistoryPageState extends State<HistoryPage>
                             child: FadeTransition(
                               opacity: opacity,
                               child: Text(
-                                'Historical Photos',
+                                'History',
                                 style: Theme.of(context).textTheme.display2,
                                 textAlign: TextAlign.center,
                               ),

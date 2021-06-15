@@ -17,9 +17,9 @@ class FirebaseData {
   });
 
   static const List<String> trailNames = [
-    'Section 1',
-    'Section 2',
-    'Section 3',
+    'Section A',
+    'Section B',
+    'Section C',
   ];
 
   static Entity getEntity({

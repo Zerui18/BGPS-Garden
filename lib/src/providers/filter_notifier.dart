@@ -58,7 +58,7 @@ class FilterNotifier extends ChangeNotifier {
       final location = Location();
       if (!mapNotifier.permissionEnabled) {
         final _perm = await location.requestPermission();
-        var success = (_perm == PermissionStatus.GRANTED);
+        var success = (_perm == PermissionStatus.granted || _perm == PermissionStatus.grantedLimited);
         if (success) {
           mapNotifier.permissionEnabled = true;
         } else {

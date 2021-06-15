@@ -152,7 +152,8 @@ class _MyHomePageState extends State<MyHomePage>
   /// Check if location permission is on
   void _checkPermission() async {
     var _perm = await _location.hasPermission();
-    var granted = (_perm == PermissionStatus.GRANTED);
+    var granted = (_perm == PermissionStatus.granted ||
+        _perm == PermissionStatus.grantedLimited);
     if (!granted) {
       _perm = await _location.requestPermission();
     }

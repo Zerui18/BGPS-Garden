@@ -190,8 +190,8 @@ class MapNotifier extends ChangeNotifier {
       activeMarker = markerId;
       markers = newMarkers;
     }
-    mapController.showMarkerInfoWindow(markerId);
-    _animateToPoint(location.coordinates, zoom ?? 18.5, adjusted);
+    // mapController.showMarkerInfoWindow(markerId);
+    // _animateToPoint(location.coordinates, zoom ?? 18.5, adjusted);
   }
 
   /// Moves the map to the bounding box of all locations of the entity
@@ -201,6 +201,7 @@ class MapNotifier extends ChangeNotifier {
     @required Size mapSize,
     bool adjusted = false,
   }) {
+    return;
     greenMarkers = [];
     final newMarkers = Map<MarkerId, Marker>.from(defaultMarkers);
     final points = entity.locations.map((entityLocation) {

@@ -29,7 +29,12 @@ class Entity implements Comparable {
     @required int id,
     @required dynamic data,
   }) {
-    final images = List<String>.from(data['imageRef']);
+    List<String> images;
+    if (data['imageRef'] != null) {
+      images = List<String>.from(data['imageRef']);
+    } else {
+      images = [];
+    }
     List<EntityLocation> locations;
 
     /// `data['locations']` is in the format of `"trail-01/route-09,trail-02/route-06"`.

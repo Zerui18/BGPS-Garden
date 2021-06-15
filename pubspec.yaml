@@ -11,7 +11,7 @@ description: The official BGPS Garden app.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.0.1
+version: 0.0.1+1
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -19,15 +19,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  collection: ^1.14.11
-  firebase_core: ^0.4.1+3
-  firebase_database: ^3.0.9
-  google_maps_flutter: ^0.5.24+1
-  location: ^2.3.5
-  path_provider: ^1.4.0
-  provider: ^4.0.4
-  shared_preferences: ^0.5.4+3
-  smooth_page_indicator: ^0.1.5
+  collection: ^1.15.0
+  firebase_core: ^1.3.0
+  firebase_database: ^7.1.1
+  google_maps_flutter: ^2.0.6
+  location: ^4.3.0
+  path_provider: ^2.0.2
+  provider: ^5.0.0
+  shared_preferences: ^2.0.6
+  smooth_page_indicator: ^0.2.3
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.4
