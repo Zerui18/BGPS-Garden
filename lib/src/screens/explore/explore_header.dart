@@ -184,16 +184,16 @@ class TrailButtonsRow extends StatelessWidget {
                 textColor: _textColors[i],
                 trailName: sections[i],
                 onPressed: () {
-                  final trailKey = TrailKey(id: 2 - i);
+                  final trailKey = SectionKey(id: 2 - i);
                   context.provide<AppNotifier>(listen: false).push(
                         context: context,
                         routeInfo: RouteInfo(
-                          name: FirebaseData.trailNames[2 - i],
+                          name: FirebaseData.sectionNames[2 - i],
                           dataKey: trailKey,
                           route: CrossFadePageRoute(
                             builder: (context) {
-                              return TrailDetailsPage(
-                                trailKey: trailKey,
+                              return SectionDetailsPage(
+                                sectionKey: trailKey,
                               );
                             },
                           ),

@@ -162,10 +162,10 @@ class _EntityDetailsPageState extends State<EntityDetailsPage> {
               const SizedBox(
                 height: 8,
               ),
-              EntityLocationsWidget(
-                locations: entity.locations,
-                scrollController: _scrollController,
-              ),
+              // EntityLocationsWidget(
+              //   locations: entity.locations,
+              //   scrollController: _scrollController,
+              // ),
               const SizedBox(
                 height: Sizes.kBottomBarHeight + 8,
               ),
@@ -194,10 +194,11 @@ class EntityLocationsWidget extends StatelessWidget {
 
     final List<Widget> children = [];
     for (final entityLocation in locations) {
-      final trailLocation = FirebaseData.getTrailLocation(
-        context: context,
-        key: entityLocation.trailLocationKey,
-      );
+      final trailLocation = null;
+      // final trailLocation = FirebaseData.getSection(
+      //   context: context,
+      //   key: entityLocation.trailLocationKey,
+      // );
       if (trailLocation != null) {
         children.add(ListTile(
           dense: true,
@@ -216,10 +217,10 @@ class EntityLocationsWidget extends StatelessWidget {
               context,
               listen: false,
             ).animateTo(height - Sizes.kCollapsedHeight - bottomPadding);
-            Provider.of<MapNotifier>(
-              context,
-              listen: false,
-            ).animateToLocation(location: trailLocation);
+            // Provider.of<MapNotifier>(
+            //   context,
+            //   listen: false,
+            // ).animateToLocation(location: trailLocation);
           },
         ));
       }

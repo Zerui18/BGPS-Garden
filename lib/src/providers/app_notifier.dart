@@ -10,7 +10,7 @@ class RouteInfo<T> {
   /// The [Route] to be pushed to the custom [Navigator] within the bottom sheet
   final Route<T> route;
 
-  /// An [EntityKey], [TrailKey] or [TrailLocationKey]
+  /// An [EntityKey], [SectionKey] or [TrailLocationKey]
   final DataKey dataKey;
 
   /// The [ScrollController] within the new route. Usually updated after the
@@ -42,7 +42,7 @@ class AppNotifier extends ChangeNotifier {
 
   int _state = 0;
 
-  /// 0: [EntityListPage] or [TrailDetailsPage]
+  /// 0: [EntityListPage] or [SectionDetailsPage]
   ///
   /// 1: [EntityDetailsPage] or [TrailLocationOverviewPage]
   ///
@@ -149,7 +149,7 @@ class AppNotifier extends ChangeNotifier {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
     final mapNotifier = Provider.of<MapNotifier>(context, listen: false);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    if (isHome || routeInfo.dataKey is TrailKey) {
+    if (isHome || routeInfo.dataKey is SectionKey) {
       _state = 0;
       mapNotifier.bottomSheetHeight = heightTooSmall
           ? Sizes.kBottomHeight -
@@ -177,20 +177,20 @@ class AppNotifier extends ChangeNotifier {
         final adjusted = bottomSheetNotifier.animation.value <
                 height - Sizes.kCollapsedHeight &&
             !heightTooSmall;
-        mapNotifier.animateToTrail(
-          locations: FirebaseData.getTrail(
-            context: context,
-            key: routeInfo.dataKey,
-            listen: false,
-          ).values.toList(),
-          adjusted: adjusted,
-          mapSize: Size(
-            width,
-            adjusted
-                ? height - Sizes.kBottomHeight - bottomPadding
-                : height - Sizes.hBottomBarHeight - bottomPadding,
-          ),
-        );
+        // mapNotifier.animateToTrail(
+        //   locations: FirebaseData.getTrail(
+        //     context: context,
+        //     key: routeInfo.dataKey,
+        //     listen: false,
+        //   ).values.toList(),
+        //   adjusted: adjusted,
+        //   mapSize: Size(
+        //     width,
+        //     adjusted
+        //         ? height - Sizes.kBottomHeight - bottomPadding
+        //         : height - Sizes.hBottomBarHeight - bottomPadding,
+        //   ),
+        // );
       }
     } else {
       _state = 1;
@@ -205,31 +205,31 @@ class AppNotifier extends ChangeNotifier {
       if (routeInfo.dataKey is EntityKey) {
         Provider.of<FilterNotifier>(context, listen: false).unfocusSearchBar();
         final firebaseData = Provider.of<FirebaseData>(context, listen: false);
-        mapNotifier.animateToEntity(
-          entity: FirebaseData.getEntity(
-            context: context,
-            key: routeInfo.dataKey,
-            listen: false,
-          ),
-          trails: firebaseData.trails,
-          adjusted: adjusted,
-          mapSize: Size(
-            width,
-            adjusted
-                ? height - Sizes.kBottomHeight - bottomPadding
-                : height - Sizes.hBottomBarHeight - bottomPadding,
-          ),
-        );
+        // mapNotifier.animateToEntity(
+        //   entity: FirebaseData.getEntity(
+        //     context: context,
+        //     key: routeInfo.dataKey,
+        //     listen: false,
+        //   ),
+        //   trails: firebaseData.trails,
+        //   adjusted: adjusted,
+        //   mapSize: Size(
+        //     width,
+        //     adjusted
+        //         ? height - Sizes.kBottomHeight - bottomPadding
+        //         : height - Sizes.hBottomBarHeight - bottomPadding,
+        //   ),
+        // );
       } else {
-        mapNotifier.animateToLocation(
-          location: FirebaseData.getTrailLocation(
-            context: context,
-            key: routeInfo.dataKey,
-            listen: false,
-          ),
-          adjusted: adjusted,
-          changeMarkerColor: true,
-        );
+        // mapNotifier.animateToLocation(
+        //   location: FirebaseData.getSection(
+        //     context: context,
+        //     key: routeInfo.dataKey,
+        //     listen: false,
+        //   ),
+        //   adjusted: adjusted,
+        //   changeMarkerColor: true,
+        // );
       }
     }
     if (notify) notifyListeners();

@@ -12,7 +12,7 @@ class Entity implements Comparable {
   final String description;
   final String smallImage;
   final List<String> images;
-  final List<EntityLocation> locations;
+  final SectionKey section;
 
   const Entity({
     this.key,
@@ -21,7 +21,7 @@ class Entity implements Comparable {
     this.description,
     this.smallImage,
     this.images,
-    this.locations,
+    this.section,
   });
 
   factory Entity.fromJson({
@@ -35,28 +35,28 @@ class Entity implements Comparable {
     } else {
       images = [];
     }
-    List<EntityLocation> locations;
+    // List<EntityLocation> locations;
 
     /// `data['locations']` is in the format of `"trail-01/route-09,trail-02/route-06"`.
-    if (data.containsKey('locations')) {
-      final List<String> strings = data['locations'].split(',');
-      // There may be trailing commas, so need to filter out invalid values.
-      strings.removeWhere((value) => value == null || value.isEmpty);
-      locations = [];
-      strings.forEach((value) {
-        final split = value.split('/');
-        final trailKey = TrailKey(
-          id: int.tryParse(split.first.split('-').last),
-        );
-        final location = EntityLocation(
-          trailLocationKey: TrailLocationKey(
-            trailKey: trailKey,
-            id: int.tryParse(split.last.split('-').last),
-          ),
-        );
-        if (location.isValid) locations.add(location);
-      });
-    }
+    // if (data.containsKey('locations')) {
+    //   final List<String> strings = data['locations'].split(',');
+    //   // There may be trailing commas, so need to filter out invalid values.
+    //   strings.removeWhere((value) => value == null || value.isEmpty);
+    //   locations = [];
+    //   strings.forEach((value) {
+    //     final split = value.split('/');
+    //     final trailKey = SectionKey(
+    //       id: int.tryParse(split.first.split('-').last),
+    //     );
+    //     final location = EntityLocation(
+    //       trailLocationKey: TrailLocationKey(
+    //         trailKey: trailKey,
+    //         id: int.tryParse(split.last.split('-').last),
+    //       ),
+    //     );
+    //     if (location.isValid) locations.add(location);
+    //   });
+    // }
 
     return Entity(
       key: EntityKey(category: category, id: id),
@@ -65,7 +65,7 @@ class Entity implements Comparable {
       description: data['description'],
       smallImage: data['smallImage'],
       images: images,
-      locations: locations,
+      section: SectionKey(id: data['section']),
     );
   }
 
@@ -85,7 +85,7 @@ class Entity implements Comparable {
         description != null &&
         smallImage != null &&
         images != null &&
-        locations != null;
+        section != null;
   }
 
   @override
@@ -104,7 +104,7 @@ class Entity implements Comparable {
             description == other.description &&
             smallImage == other.smallImage &&
             listEquals(images, other.images) &&
-            listEquals(locations, other.locations);
+            section == other.section;
   }
 
   @override
@@ -116,7 +116,7 @@ class Entity implements Comparable {
       description,
       smallImage,
       hashList(images),
-      hashList(locations),
+      section,
     );
   }
 
@@ -162,7 +162,7 @@ class TrailLocation {
   });
   factory TrailLocation.fromJson({
     @required TrailLocationKey key,
-    @required TrailKey trailKey,
+    @required SectionKey trailKey,
     @required dynamic data,
   }) {
     List<EntityPosition> entityPositions;

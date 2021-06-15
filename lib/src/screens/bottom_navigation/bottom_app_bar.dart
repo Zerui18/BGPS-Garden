@@ -1,6 +1,6 @@
 import 'package:bgps_garden/src/library.dart';
 
-/// Bottom Navigation on for the rest of the pages: [TrailDetailsPage],
+/// Bottom Navigation on for the rest of the pages: [SectionDetailsPage],
 /// [EntityDetailsPage] and [TrailLocationOverviewPage]
 class CustomBottomAppBar extends StatefulWidget {
   const CustomBottomAppBar({Key key}) : super(key: key);

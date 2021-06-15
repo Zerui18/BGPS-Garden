@@ -197,29 +197,28 @@ class MapNotifier extends ChangeNotifier {
   /// Moves the map to the bounding box of all locations of the entity
   void animateToEntity({
     @required Entity entity,
-    @required TrailMap trails,
+    @required SectionMap trails,
     @required Size mapSize,
     bool adjusted = false,
   }) {
-    return;
-    greenMarkers = [];
-    final newMarkers = Map<MarkerId, Marker>.from(defaultMarkers);
-    final points = entity.locations.map((entityLocation) {
-      final trailLocationKey = entityLocation.trailLocationKey;
-      final markerId =
-          MarkerId('${trailLocationKey.trailKey.id} ${trailLocationKey.id}');
-      _replaceWithGreenMarker(newMarkers, markerId);
-      final location = trails[trailLocationKey.trailKey][trailLocationKey];
-      return location.coordinates;
-    }).toList();
-    markers = newMarkers;
-    if (activeMarker != null) {
-      try {
-        mapController.hideMarkerInfoWindow(activeMarker);
-      } catch (e) {}
-      activeMarker = null;
-    }
-    _animateToPoints(points, adjusted, mapSize);
+    // greenMarkers = [];
+    // final newMarkers = Map<MarkerId, Marker>.from(defaultMarkers);
+    // final points = entity.locations.map((entityLocation) {
+    //   final trailLocationKey = entityLocation.trailLocationKey;
+    //   final markerId =
+    //       MarkerId('${trailLocationKey.trailKey.id} ${trailLocationKey.id}');
+    //   _replaceWithGreenMarker(newMarkers, markerId);
+    //   final location = trails[trailLocationKey.trailKey][trailLocationKey];
+    //   return location.coordinates;
+    // }).toList();
+    // markers = newMarkers;
+    // if (activeMarker != null) {
+    //   try {
+    //     mapController.hideMarkerInfoWindow(activeMarker);
+    //   } catch (e) {}
+    //   activeMarker = null;
+    // }
+    // _animateToPoints(points, adjusted, mapSize);
   }
 
   /// Moves the map to the bounding box of a trail

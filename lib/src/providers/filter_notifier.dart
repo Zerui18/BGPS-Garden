@@ -30,11 +30,11 @@ class FilterNotifier extends ChangeNotifier {
   // Filtering by [Trail]
 
   /// All trails are selected by default
-  List<TrailKey> _selectedTrailKeys = [
-    for (final i in [0, 1, 2]) TrailKey(id: i)
+  List<SectionKey> _selectedTrailKeys = [
+    for (final i in [0, 1, 2]) SectionKey(id: i)
   ];
-  List<TrailKey> get selectedTrailKeys => _selectedTrailKeys;
-  set selectedTrailKeys(List<TrailKey> selectedTrailKeys) {
+  List<SectionKey> get selectedTrailKeys => _selectedTrailKeys;
+  set selectedTrailKeys(List<SectionKey> selectedTrailKeys) {
     _selectedTrailKeys = selectedTrailKeys;
     notifyListeners();
   }
@@ -58,7 +58,8 @@ class FilterNotifier extends ChangeNotifier {
       final location = Location();
       if (!mapNotifier.permissionEnabled) {
         final _perm = await location.requestPermission();
-        var success = (_perm == PermissionStatus.granted || _perm == PermissionStatus.grantedLimited);
+        var success = (_perm == PermissionStatus.granted ||
+            _perm == PermissionStatus.grantedLimited);
         if (success) {
           mapNotifier.permissionEnabled = true;
         } else {
@@ -74,62 +75,62 @@ class FilterNotifier extends ChangeNotifier {
         }
       }
       final locationData = await location.getLocation();
-      _sortEntitiesByDist(
-        firebaseData.entities,
-        firebaseData.trails,
-        locationData,
-      );
+      // _sortEntitiesByDist(
+      //   firebaseData.entities,
+      //   firebaseData.trails,
+      //   locationData,
+      // );
     }
     notifyListeners();
     _isSortedByDistance = !_isSortedByDistance;
     return DistanceSortingState.none;
   }
 
-  void _sortEntitiesByDist(
-    EntityMap entities,
-    TrailMap trails,
-    LocationData locationData,
-  ) {
-    entities.forEach((category, entityList) {
-      entitiesByDist[category] = [];
-      // Clone and sort the list alphabetically first
-      entityList = List.from(entityList);
-      entityList.sort();
-      for (final entity in entityList) {
-        double minDist = double.infinity;
-        for (var location in entity.locations) {
-          final trailLocation = trails[location.trailLocationKey.trailKey]
-              [location.trailLocationKey];
-          final dist = sqrt(
-            pow(
-                  trailLocation.coordinates.latitude - locationData.latitude,
-                  2,
-                ) +
-                pow(
-                  trailLocation.coordinates.longitude - locationData.longitude,
-                  2,
-                ),
-          );
-          if (dist < minDist) minDist = dist;
-        }
-        entitiesByDist[category].add(EntityDistance(
-          key: entity.key,
-          name: entity.name,
-          distance: minDist,
-        ));
-      }
-      entitiesByDist[category].sort();
-    });
-  }
+  // void _sortEntitiesByDist(
+  //   EntityMap entities,
+  //   SectionMap trails,
+  //   LocationData locationData,
+  // ) {
+  //   entities.forEach((category, entityList) {
+  //     entitiesByDist[category] = [];
+  //     // Clone and sort the list alphabetically first
+  //     entityList = List.from(entityList);
+  //     entityList.sort();
+  //     for (final entity in entityList) {
+  //       double minDist = double.infinity;
+  //       for (var location in entity.locations) {
+  //         final trailLocation = trails[location.trailLocationKey.trailKey]
+  //             [location.trailLocationKey];
+  //         final dist = sqrt(
+  //           pow(
+  //                 trailLocation.coordinates.latitude - locationData.latitude,
+  //                 2,
+  //               ) +
+  //               pow(
+  //                 trailLocation.coordinates.longitude - locationData.longitude,
+  //                 2,
+  //               ),
+  //         );
+  //         if (dist < minDist) minDist = dist;
+  //       }
+  //       entitiesByDist[category].add(EntityDistance(
+  //         key: entity.key,
+  //         name: entity.name,
+  //         distance: minDist,
+  //       ));
+  //     }
+  //     entitiesByDist[category].sort();
+  //   });
+  // }
 
-  bool _entityIsInTrails(Entity entity) {
-    if (selectedTrailKeys.length == 3) return true;
-    return !selectedTrailKeys.every((trailKey) {
-      return entity.locations.every((location) {
-        return location.trailLocationKey.trailKey != trailKey;
-      });
-    });
-  }
+  // bool _entityIsInTrails(Entity entity) {
+  //   if (selectedTrailKeys.length == 3) return true;
+  //   return !selectedTrailKeys.every((trailKey) {
+  //     return entity.locations.every((location) {
+  //       return location.trailLocationKey.trailKey != trailKey;
+  //     });
+  //   });
+  // }
 
   EntityMap filter(EntityMap entities) {
     final newEntityMap = EntityMap();
@@ -141,7 +142,7 @@ class FilterNotifier extends ChangeNotifier {
           final matchingEntities = <MapEntry<Entity, int>>[];
           for (final entityDistance in entitiesByDist[category]) {
             final entity = entities[category][entityDistance.key.id];
-            if (_entityIsInTrails(entity)) {
+            if (true) {
               final relevance = entity.matches(searchTerm);
               if (relevance != 0) {
                 matchingEntities.add(MapEntry(entity, relevance));
@@ -156,7 +157,7 @@ class FilterNotifier extends ChangeNotifier {
           newEntityMap[category] = [];
           for (final entityDistance in entitiesByDist[category]) {
             final entity = entities[category][entityDistance.key.id];
-            if (_entityIsInTrails(entity)) {
+            if (true) {
               newEntityMap[category].add(entity);
             }
           }
@@ -169,7 +170,7 @@ class FilterNotifier extends ChangeNotifier {
           final matchingEntities = <MapEntry<Entity, int>>[];
           final entityList = List.from(entities[category])..sort();
           for (final entity in entityList) {
-            if (_entityIsInTrails(entity)) {
+            if (true) {
               final relevance = entity.matches(searchTerm);
               if (relevance != 0) {
                 matchingEntities.add(MapEntry(entity, relevance));
@@ -181,8 +182,7 @@ class FilterNotifier extends ChangeNotifier {
           newEntityMap[category] =
               matchingEntities.map((entry) => entry.key).toList();
         } else {
-          newEntityMap[category] =
-              entities[category].where(_entityIsInTrails).toList();
+          newEntityMap[category] = entities[category].toList();
           newEntityMap[category].sort();
         }
       }

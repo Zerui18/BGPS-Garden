@@ -59,14 +59,14 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         style: Theme.of(context).textTheme.subtitle2,
                       ),
                     ),
-                    Selector<FilterNotifier, List<TrailKey>>(
+                    Selector<FilterNotifier, List<SectionKey>>(
                       selector: (context, filterNotifier) {
                         return filterNotifier.selectedTrailKeys;
                       },
                       builder: (context, selectedTrailKeys, child) {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
-                          children: FirebaseData.trailNames
+                          children: FirebaseData.sectionNames
                               .asMap()
                               .entries
                               .map((trailEntry) {
@@ -87,10 +87,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                                   context,
                                   listen: false,
                                 );
-                                final newTrailKeys = List<TrailKey>.from(
+                                final newTrailKeys = List<SectionKey>.from(
                                   filterNotifier.selectedTrailKeys,
                                 );
-                                final trailKey = TrailKey(id: trailEntry.key);
+                                final trailKey = SectionKey(id: trailEntry.key);
                                 newTrailKeys.remove(trailKey);
                                 if (value) {
                                   newTrailKeys.add(trailKey);

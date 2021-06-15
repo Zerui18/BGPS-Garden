@@ -38,12 +38,12 @@ class EntityKey extends DataKey {
 }
 
 /// A unique identifier for a [Trail]. Wraps its `id`.
-class TrailKey extends DataKey {
-  TrailKey({@required int id}) : super(id: id);
+class SectionKey extends DataKey {
+  SectionKey({@required int id}) : super(id: id);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) || other is TrailKey && id == other.id;
+    return identical(this, other) || other is SectionKey && id == other.id;
   }
 
   @override
@@ -51,13 +51,13 @@ class TrailKey extends DataKey {
 
   @override
   String toString() {
-    return 'TrailKey(id: $id)';
+    return 'SectionKey(id: $id)';
   }
 }
 
 /// A unique identifier for a [TrailLocation]. Wraps its `id`.
 class TrailLocationKey extends DataKey {
-  final TrailKey trailKey;
+  final SectionKey trailKey;
   TrailLocationKey({@required this.trailKey, @required int id}) : super(id: id);
 
   @override

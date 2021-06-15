@@ -10,7 +10,7 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
   bool _init = false;
   GoogleMapController _mapController;
-  CameraPosition _initialCameraPosition;
+  // CameraPosition _initialCameraPosition;
   static const _initialZoom = 16.4;
 
   /// When map is first built, it does not have the top padding, so the initial camera position will also have to account for [topPaddingAdjustment]
@@ -27,14 +27,14 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
     setState(() {});
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    final mapNotifier = Provider.of<MapNotifier>(context, listen: false);
-    _mapController = controller;
-    mapNotifier.mapController = _mapController;
-    _mapController.setMapStyle(mapStyle);
-    // Needed to correctly apply padding
-    rebuild();
-  }
+  // void _onMapCreated(GoogleMapController controller) {
+  //   final mapNotifier = Provider.of<MapNotifier>(context, listen: false);
+  //   _mapController = controller;
+  //   mapNotifier.mapController = _mapController;
+  //   _mapController.setMapStyle(mapStyle);
+  //   // Needed to correctly apply padding
+  //   rebuild();
+  // }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -61,13 +61,13 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
     if (!_init) {
       final mapNotifier = Provider.of<MapNotifier>(context);
       final adjustAmount = mapNotifier.getAdjustAmount(_initialZoom);
-      _initialCameraPosition = CameraPosition(
-        target: LatLng(
-          center.latitude - adjustAmount + topPaddingAdjustment,
-          center.longitude,
-        ),
-        zoom: _initialZoom,
-      );
+      // _initialCameraPosition = CameraPosition(
+      //   target: LatLng(
+      //     center.latitude - adjustAmount + topPaddingAdjustment,
+      //     center.longitude,
+      //   ),
+      //   zoom: _initialZoom,
+      // );
       mapNotifier.cameraPosition = CameraPosition(
         target: LatLng(
           center.latitude - adjustAmount,
@@ -143,23 +143,23 @@ class _MapDataWidgetState extends State<MapDataWidget> {
         listen: false,
       ).animateTo(0);
     } else {
-      appNotifier.push(
-        context: context,
-        routeInfo: RouteInfo(
-          name: location.name,
-          dataKey: location.key,
-          route: CrossFadePageRoute(
-            builder: (context) {
-              return Material(
-                color: Theme.of(context).bottomAppBarColor,
-                child: TrailLocationOverviewPage(
-                  trailLocationKey: location.key,
-                ),
-              );
-            },
-          ),
-        ),
-      );
+      // appNotifier.push(
+      //   context: context,
+      //   routeInfo: RouteInfo(
+      //     name: location.name,
+      //     dataKey: location.key,
+      //     route: CrossFadePageRoute(
+      //       builder: (context) {
+      //         return Material(
+      //           color: Theme.of(context).bottomAppBarColor,
+      //           child: TrailLocationOverviewPage(
+      //             trailLocationKey: location.key,
+      //           ),
+      //         );
+      //       },
+      //     ),
+      //   ),
+      // );
     }
   }
 
@@ -188,14 +188,14 @@ class _MapDataWidgetState extends State<MapDataWidget> {
   void onData(FirebaseData data, {bool notify = true}) {
     final mapNotifier = context.provide<MapNotifier>(listen: false);
     Map<MarkerId, Marker> mapMarkers = {};
-    data?.trails?.forEach((trailKey, locations) {
-      locations.forEach((key, value) {
-        mapMarkers[MarkerId('${trailKey.id} ${key.id}')] = _generateMarker(
-          context: context,
-          location: value,
-        );
-      });
-    });
+    // data?.trails?.forEach((trailKey, locations) {
+    //   locations.forEach((key, value) {
+    //     mapMarkers[MarkerId('${trailKey.id} ${key.id}')] = _generateMarker(
+    //       context: context,
+    //       location: value,
+    //     );
+    //   });
+    // });
     if (mapMarkers.isNotEmpty) {
       mapNotifier.setDefaultMarkers(
         mapMarkers,

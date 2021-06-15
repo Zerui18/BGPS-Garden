@@ -3,20 +3,20 @@ import 'dart:collection';
 
 class FirebaseData {
   final EntityMap entities;
-  final TrailMap trails;
+  final SectionMap sections;
   final List<HistoricalData> historicalDataList;
   final List<AboutPageData> aboutPageDataList;
   final Set<Polygon> mapPolygons;
 
   const FirebaseData({
     this.entities,
-    this.trails,
+    this.sections,
     this.historicalDataList,
     this.aboutPageDataList,
     this.mapPolygons,
   });
 
-  static const List<String> trailNames = [
+  static const List<String> sectionNames = [
     'Section A',
     'Section B',
     'Section C',
@@ -27,33 +27,21 @@ class FirebaseData {
     @required EntityKey key,
     bool listen = true,
   }) {
-    // TODO: replace with context.select in the future
     return Provider.of<FirebaseData>(
       context,
       listen: listen,
     ).entities[key.category][key.id];
   }
 
-  static TrailLocation getTrailLocation({
+  static SectionData getSection({
     @required BuildContext context,
-    @required TrailLocationKey key,
+    @required SectionKey key,
     bool listen = true,
   }) {
     return Provider.of<FirebaseData>(
       context,
       listen: listen,
-    ).trails[key.trailKey][key];
-  }
-
-  static Map<TrailLocationKey, TrailLocation> getTrail({
-    @required BuildContext context,
-    @required TrailKey key,
-    bool listen = true,
-  }) {
-    return Provider.of<FirebaseData>(
-      context,
-      listen: listen,
-    ).trails[key];
+    ).sections[key];
   }
 
   /// Needed when the data is a list, to return a map anyways
@@ -68,7 +56,7 @@ class FirebaseData {
   /// `data` should be the JSON data of the entire database.
   factory FirebaseData.fromJson(dynamic data) {
     final entities = EntityMap();
-    final trails = TrailMap();
+    final sections = SectionMap();
     final List<HistoricalData> historicalDataList = [];
     final List<AboutPageData> aboutPageDataList = [];
     final Set<Polygon> mapPolygons = {};
@@ -85,24 +73,19 @@ class FirebaseData {
       );
     });
 
-    // Adding trails
-    _getMap(data['trails']).forEach((trailId, trailValue) {
-      final trailKey = TrailKey(id: trailId);
-      if (trailValue['name'].contains(trailNames[trailId])) {
-        trails[trailKey] = {};
-        _getMap(trailValue['locations']).forEach((locationId, locationValue) {
-          final trailLocationKey = TrailLocationKey(
-            trailKey: trailKey,
-            id: locationId,
-          );
-          final location = TrailLocation.fromJson(
-            key: trailLocationKey,
-            trailKey: trailKey,
-            data: locationValue,
-          );
-          if (location.isValid) trails[trailKey][trailLocationKey] = location;
-        });
-      }
+    // Adding sections
+    Map<int, int> sectionToFlora = {};
+    _getMap(data['flora']).forEach((floraId, floraValue) {
+      sectionToFlora[floraValue['section']] = floraId;
+    });
+
+    _getMap(data['sections']).forEach((sectionId, section) {
+      final entityKeys = _getMap(section['items']).values.map((item) {
+        return EntityKey(category: item['category'], id: item['id']);
+      }).toList();
+      final sectionData = SectionData(items: entityKeys, name: section['name']);
+      final key = SectionKey(id: sectionId);
+      sections[key] = sectionData;
     });
 
     // Add historical data
@@ -120,14 +103,14 @@ class FirebaseData {
     aboutPageDataList.sort((a, b) => a.id.compareTo(b.id));
 
     // Add Map Polygons/Outlines for each building
-    _getMap(data['mapPolygons']).forEach((key, value) {
-      final polygon = generatePolygonFromJson(key, value);
-      if (polygon != null) mapPolygons.add(polygon);
-    });
+    // _getMap(data['mapPolygons']).forEach((key, value) {
+    //   final polygon = generatePolygonFromJson(key, value);
+    //   if (polygon != null) mapPolygons.add(polygon);
+    // });
 
     return FirebaseData(
       entities: entities,
-      trails: trails,
+      sections: sections,
       historicalDataList: historicalDataList,
       aboutPageDataList: aboutPageDataList,
       mapPolygons: mapPolygons,
@@ -158,6 +141,13 @@ class EntityMap extends MapView<String, List<Entity>> {
   }
 }
 
-class TrailMap extends MapView<TrailKey, Map<TrailLocationKey, TrailLocation>> {
-  TrailMap() : super({});
+class SectionData {
+  List<EntityKey> items;
+  String name;
+
+  SectionData({this.items, this.name});
+}
+
+class SectionMap extends MapView<SectionKey, SectionData> {
+  SectionMap() : super({});
 }
