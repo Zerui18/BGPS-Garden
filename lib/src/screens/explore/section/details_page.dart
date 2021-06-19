@@ -81,7 +81,8 @@ class _SectionDetailsPageState extends State<SectionDetailsPage> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 32, 0, 16),
                   child: Text(
-                    FirebaseData.sectionNames[widget.sectionKey.id],
+                    FirebaseData.getSectionNames(
+                        context: context)[widget.sectionKey.id],
                     style: Theme.of(context).textTheme.headline4,
                     textAlign: TextAlign.center,
                   ),

@@ -4,6 +4,7 @@ import 'dart:collection';
 class FirebaseData {
   final EntityMap entities;
   final SectionMap sections;
+  final List<String> sectionNames;
   final List<HistoricalData> historicalDataList;
   final List<AboutPageData> aboutPageDataList;
   final Set<Polygon> mapPolygons;
@@ -11,16 +12,11 @@ class FirebaseData {
   const FirebaseData({
     this.entities,
     this.sections,
+    this.sectionNames,
     this.historicalDataList,
     this.aboutPageDataList,
     this.mapPolygons,
   });
-
-  static const List<String> sectionNames = [
-    'Section A',
-    'Section B',
-    'Section C',
-  ];
 
   static Entity getEntity({
     @required BuildContext context,
@@ -44,6 +40,12 @@ class FirebaseData {
     ).sections[key];
   }
 
+  static List<String> getSectionNames(
+      {@required BuildContext context, bool listen = true}) {
+    final provider = Provider.of<FirebaseData>(context, listen: listen);
+    return provider != null ? provider.sectionNames : [];
+  }
+
   /// Needed when the data is a list, to return a map anyways
   static Map _getMap(data) {
     if (data is List)
@@ -57,6 +59,7 @@ class FirebaseData {
   factory FirebaseData.fromJson(dynamic data) {
     final entities = EntityMap();
     final sections = SectionMap();
+    final List<String> sectionNames = [];
     final List<HistoricalData> historicalDataList = [];
     final List<AboutPageData> aboutPageDataList = [];
     final Set<Polygon> mapPolygons = {};
@@ -74,18 +77,35 @@ class FirebaseData {
     });
 
     // Adding sections
-    Map<int, int> sectionToFlora = {};
+    Map<int, List<EntityKey>> sectionToFlora = {};
     _getMap(data['flora']).forEach((floraId, floraValue) {
-      sectionToFlora[floraValue['section']] = floraId;
+      int sectionId = floraValue['section'];
+      if (!sectionToFlora.containsKey(sectionId)) {
+        sectionToFlora[sectionId] = [];
+      }
+      sectionToFlora[sectionId].add(EntityKey(category: 'flora', id: floraId));
+    });
+
+    data['fauna'].forEach((category, value) {
+      _getMap(value).forEach((faunaId, faunaValue) {
+        int sectionId = faunaValue['section'];
+        if (!sectionToFlora.containsKey(sectionId)) {
+          sectionToFlora[sectionId] = [];
+        }
+        sectionToFlora[sectionId]
+            .add(EntityKey(category: 'fauna', id: faunaId));
+      });
     });
 
     _getMap(data['sections']).forEach((sectionId, section) {
-      final entityKeys = _getMap(section['items']).values.map((item) {
-        return EntityKey(category: item['category'], id: item['id']);
-      }).toList();
-      final sectionData = SectionData(items: entityKeys, name: section['name']);
+      final sectionData = SectionData(
+          items: sectionToFlora.containsKey(sectionId)
+              ? sectionToFlora[sectionId]
+              : [],
+          name: section['name']);
       final key = SectionKey(id: sectionId);
       sections[key] = sectionData;
+      sectionNames.add(section['name']);
     });
 
     // Add historical data
@@ -102,15 +122,10 @@ class FirebaseData {
     });
     aboutPageDataList.sort((a, b) => a.id.compareTo(b.id));
 
-    // Add Map Polygons/Outlines for each building
-    // _getMap(data['mapPolygons']).forEach((key, value) {
-    //   final polygon = generatePolygonFromJson(key, value);
-    //   if (polygon != null) mapPolygons.add(polygon);
-    // });
-
     return FirebaseData(
       entities: entities,
       sections: sections,
+      sectionNames: sectionNames,
       historicalDataList: historicalDataList,
       aboutPageDataList: aboutPageDataList,
       mapPolygons: mapPolygons,

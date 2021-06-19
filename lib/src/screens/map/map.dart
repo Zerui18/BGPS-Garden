@@ -8,33 +8,9 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
-  bool _init = false;
-  GoogleMapController _mapController;
-  // CameraPosition _initialCameraPosition;
-  static const _initialZoom = 16.4;
-
-  /// When map is first built, it does not have the top padding, so the initial camera position will also have to account for [topPaddingAdjustment]
-  double get topPaddingAdjustment {
-    final topPadding = MediaQuery.of(context).padding.top;
-    const circumference = 2 * pi * 6378137;
-    final metresPerPixel =
-        156543.03392 * cos(center.latitude * pi / 180) / pow(2, _initialZoom);
-    final _height = topPadding / 2 * metresPerPixel;
-    return _height / circumference * 360;
-  }
-
   void rebuild() {
     setState(() {});
   }
-
-  // void _onMapCreated(GoogleMapController controller) {
-  //   final mapNotifier = Provider.of<MapNotifier>(context, listen: false);
-  //   _mapController = controller;
-  //   mapNotifier.mapController = _mapController;
-  //   _mapController.setMapStyle(mapStyle);
-  //   // Needed to correctly apply padding
-  //   rebuild();
-  // }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -49,34 +25,7 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    rootBundle.loadString('assets/data/mapStyle.json').then((string) {
-      mapStyle = string;
-    });
     WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_init) {
-      final mapNotifier = Provider.of<MapNotifier>(context);
-      final adjustAmount = mapNotifier.getAdjustAmount(_initialZoom);
-      // _initialCameraPosition = CameraPosition(
-      //   target: LatLng(
-      //     center.latitude - adjustAmount + topPaddingAdjustment,
-      //     center.longitude,
-      //   ),
-      //   zoom: _initialZoom,
-      // );
-      mapNotifier.cameraPosition = CameraPosition(
-        target: LatLng(
-          center.latitude - adjustAmount,
-          center.longitude,
-        ),
-        zoom: _initialZoom,
-      );
-      _init = true;
-    }
   }
 
   @override
@@ -87,7 +36,6 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // final mapNotifier = Provider.of<MapNotifier>(context);
     return CustomAnimatedSwitcher(
       fadeIn: true,
       child: SafeArea(
@@ -101,7 +49,7 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.contain,
-                        image: AssetImage('assets/images/map_placeholder.png'),
+                        image: AssetImage('assets/images/map.png'),
                         alignment: Alignment.topCenter),
                     borderRadius: BorderRadius.all(Radius.circular(20))),
               ))),
@@ -124,100 +72,8 @@ class MapDataWidget extends StatefulWidget {
 }
 
 class _MapDataWidgetState extends State<MapDataWidget> {
-  bool _init = false;
-  StreamSubscription<FirebaseData> _streamSubscription;
-
-  void _markerOnTap({
-    BuildContext context,
-    TrailLocation location,
-  }) {
-    final appNotifier = Provider.of<AppNotifier>(
-      context,
-      listen: false,
-    );
-    if (appNotifier.routes.isNotEmpty &&
-        appNotifier.routes.last.dataKey is TrailLocationKey &&
-        appNotifier.routes.last.dataKey == location.key) {
-      Provider.of<BottomSheetNotifier>(
-        context,
-        listen: false,
-      ).animateTo(0);
-    } else {
-      // appNotifier.push(
-      //   context: context,
-      //   routeInfo: RouteInfo(
-      //     name: location.name,
-      //     dataKey: location.key,
-      //     route: CrossFadePageRoute(
-      //       builder: (context) {
-      //         return Material(
-      //           color: Theme.of(context).bottomAppBarColor,
-      //           child: TrailLocationOverviewPage(
-      //             trailLocationKey: location.key,
-      //           ),
-      //         );
-      //       },
-      //     ),
-      //   ),
-      // );
-    }
-  }
-
-  Marker _generateMarker({BuildContext context, TrailLocation location}) {
-    final mapNotifier = Provider.of<MapNotifier>(context, listen: false);
-    final markerId = MarkerId('${location.key.trailKey.id} ${location.key.id}');
-    return Marker(
-      onTap: () {
-        mapNotifier.activeMarker = markerId;
-        _markerOnTap(context: context, location: location);
-      },
-      markerId: markerId,
-      position: location.coordinates,
-      infoWindow: InfoWindow(
-        title: location.name,
-        onTap: () {
-          _markerOnTap(context: context, location: location);
-        },
-      ),
-      icon: mapNotifier.markerIcons[location.key.trailKey.id],
-      /*Right now we are sticking with trail colors.
-      Logistically speaking an image per map marker is insane and unviable.*/
-    );
-  }
-
-  void onData(FirebaseData data, {bool notify = true}) {
-    final mapNotifier = context.provide<MapNotifier>(listen: false);
-    Map<MarkerId, Marker> mapMarkers = {};
-    // data?.trails?.forEach((trailKey, locations) {
-    //   locations.forEach((key, value) {
-    //     mapMarkers[MarkerId('${trailKey.id} ${key.id}')] = _generateMarker(
-    //       context: context,
-    //       location: value,
-    //     );
-    //   });
-    // });
-    if (mapMarkers.isNotEmpty) {
-      mapNotifier.setDefaultMarkers(
-        mapMarkers,
-        notify: notify,
-      );
-    }
-    mapNotifier.setPolygons(data?.mapPolygons, notify: notify);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_init) {
-      _streamSubscription = widget.firebaseDataStream.listen(onData);
-      onData(Provider.of<FirebaseData>(context, listen: false), notify: false);
-      _init = true;
-    }
-  }
-
   @override
   void dispose() {
-    _streamSubscription.cancel();
     super.dispose();
   }
 

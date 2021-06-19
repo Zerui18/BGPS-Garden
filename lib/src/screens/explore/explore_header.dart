@@ -160,7 +160,7 @@ class TrailButtonsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const sections = ['Section A', 'Section B', 'Section C'];
+    final sections = FirebaseData.getSectionNames(context: context);
     final _colors = [
       Colors.lightBlue,
       Colors.pink,
@@ -173,38 +173,41 @@ class TrailButtonsRow extends StatelessWidget {
     ];
 
     return FadeTransition(
-      opacity: opacity,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8),
-        child: Row(
-          children: [
-            for (int i = 0; i < sections.length; i++)
-              TrailButton(
-                color: _colors[i],
-                textColor: _textColors[i],
-                trailName: sections[i],
-                onPressed: () {
-                  final trailKey = SectionKey(id: 2 - i);
-                  context.provide<AppNotifier>(listen: false).push(
-                        context: context,
-                        routeInfo: RouteInfo(
-                          name: FirebaseData.sectionNames[2 - i],
-                          dataKey: trailKey,
-                          route: CrossFadePageRoute(
-                            builder: (context) {
-                              return SectionDetailsPage(
-                                sectionKey: trailKey,
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                },
-              ),
-          ],
-        ),
-      ),
-    );
+        opacity: opacity,
+        child: Container(
+          height: 70,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                for (int i = 0; i < sections.length; i++)
+                  TrailButton(
+                    color: _colors[i % 3],
+                    textColor: _textColors[i % 3],
+                    trailName: sections[i],
+                    onPressed: () {
+                      final sectionKey = SectionKey(id: i);
+                      context.provide<AppNotifier>(listen: false).push(
+                            context: context,
+                            routeInfo: RouteInfo(
+                              name: sections[i],
+                              dataKey: sectionKey,
+                              route: CrossFadePageRoute(
+                                builder: (context) {
+                                  return SectionDetailsPage(
+                                    sectionKey: sectionKey,
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                    },
+                  ),
+              ],
+            ),
+          ),
+        ));
   }
 }
 

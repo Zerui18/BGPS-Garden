@@ -31,7 +31,7 @@ class FilterNotifier extends ChangeNotifier {
 
   /// All trails are selected by default
   List<SectionKey> _selectedTrailKeys = [
-    for (final i in [0, 1, 2]) SectionKey(id: i)
+    for (final i in [0, 1, 2, 3, 4, 5]) SectionKey(id: i)
   ];
   List<SectionKey> get selectedTrailKeys => _selectedTrailKeys;
   set selectedTrailKeys(List<SectionKey> selectedTrailKeys) {
@@ -39,152 +39,29 @@ class FilterNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Sorting alpabetically or by distance
-
-  bool _isSortedByDistance = false;
-  bool get isSortedByDistance => _isSortedByDistance;
-
-  Map<String, List<EntityDistance>> entitiesByDist = {};
-
-  Future<DistanceSortingState> toggleSortByDist(BuildContext context) async {
-    if (_isSortedByDistance) {
-      entitiesByDist.clear();
-    } else {
-      final firebaseData = Provider.of<FirebaseData>(
-        context,
-        listen: false,
-      );
-      final mapNotifier = context.provide<MapNotifier>(listen: false);
-      final location = Location();
-      if (!mapNotifier.permissionEnabled) {
-        final _perm = await location.requestPermission();
-        var success = (_perm == PermissionStatus.granted ||
-            _perm == PermissionStatus.grantedLimited);
-        if (success) {
-          mapNotifier.permissionEnabled = true;
-        } else {
-          return DistanceSortingState.locationPermissionDenied;
-        }
-      }
-      if (!mapNotifier.gpsOn) {
-        final success = await location.requestService();
-        if (success) {
-          mapNotifier.gpsOn = true;
-        } else {
-          return DistanceSortingState.locationOff;
-        }
-      }
-      final locationData = await location.getLocation();
-      // _sortEntitiesByDist(
-      //   firebaseData.entities,
-      //   firebaseData.trails,
-      //   locationData,
-      // );
-    }
-    notifyListeners();
-    _isSortedByDistance = !_isSortedByDistance;
-    return DistanceSortingState.none;
-  }
-
-  // void _sortEntitiesByDist(
-  //   EntityMap entities,
-  //   SectionMap trails,
-  //   LocationData locationData,
-  // ) {
-  //   entities.forEach((category, entityList) {
-  //     entitiesByDist[category] = [];
-  //     // Clone and sort the list alphabetically first
-  //     entityList = List.from(entityList);
-  //     entityList.sort();
-  //     for (final entity in entityList) {
-  //       double minDist = double.infinity;
-  //       for (var location in entity.locations) {
-  //         final trailLocation = trails[location.trailLocationKey.trailKey]
-  //             [location.trailLocationKey];
-  //         final dist = sqrt(
-  //           pow(
-  //                 trailLocation.coordinates.latitude - locationData.latitude,
-  //                 2,
-  //               ) +
-  //               pow(
-  //                 trailLocation.coordinates.longitude - locationData.longitude,
-  //                 2,
-  //               ),
-  //         );
-  //         if (dist < minDist) minDist = dist;
-  //       }
-  //       entitiesByDist[category].add(EntityDistance(
-  //         key: entity.key,
-  //         name: entity.name,
-  //         distance: minDist,
-  //       ));
-  //     }
-  //     entitiesByDist[category].sort();
-  //   });
-  // }
-
-  // bool _entityIsInTrails(Entity entity) {
-  //   if (selectedTrailKeys.length == 3) return true;
-  //   return !selectedTrailKeys.every((trailKey) {
-  //     return entity.locations.every((location) {
-  //       return location.trailLocationKey.trailKey != trailKey;
-  //     });
-  //   });
-  // }
-
   EntityMap filter(EntityMap entities) {
     final newEntityMap = EntityMap();
     final categories = entities.keys.toList()..sort();
     for (final category in categories) {
-      // Sort by distance and does filtering based on trails and search inside as well
-      if (isSortedByDistance) {
-        if (isSearching) {
-          final matchingEntities = <MapEntry<Entity, int>>[];
-          for (final entityDistance in entitiesByDist[category]) {
-            final entity = entities[category][entityDistance.key.id];
-            if (true) {
-              final relevance = entity.matches(searchTerm);
-              if (relevance != 0) {
-                matchingEntities.add(MapEntry(entity, relevance));
-              }
-            }
-          }
-          // From highest to lowest
-          matchingEntities.sort((a, b) => b.value.compareTo(a.value));
-          newEntityMap[category] =
-              matchingEntities.map((entry) => entry.key).toList();
-        } else {
-          newEntityMap[category] = [];
-          for (final entityDistance in entitiesByDist[category]) {
-            final entity = entities[category][entityDistance.key.id];
-            if (true) {
-              newEntityMap[category].add(entity);
-            }
-          }
-        }
-      }
-
       // Filter by trail, no sorting by distance
-      else {
-        if (isSearching) {
-          final matchingEntities = <MapEntry<Entity, int>>[];
-          final entityList = List.from(entities[category])..sort();
-          for (final entity in entityList) {
-            if (true) {
-              final relevance = entity.matches(searchTerm);
-              if (relevance != 0) {
-                matchingEntities.add(MapEntry(entity, relevance));
-              }
+      if (isSearching) {
+        final matchingEntities = <MapEntry<Entity, int>>[];
+        final entityList = List.from(entities[category])..sort();
+        for (final entity in entityList) {
+          if (true) {
+            final relevance = entity.matches(searchTerm);
+            if (relevance != 0) {
+              matchingEntities.add(MapEntry(entity, relevance));
             }
           }
-          // From highest to lowest
-          matchingEntities.sort((a, b) => b.value.compareTo(a.value));
-          newEntityMap[category] =
-              matchingEntities.map((entry) => entry.key).toList();
-        } else {
-          newEntityMap[category] = entities[category].toList();
-          newEntityMap[category].sort();
         }
+        // From highest to lowest
+        matchingEntities.sort((a, b) => b.value.compareTo(a.value));
+        newEntityMap[category] =
+            matchingEntities.map((entry) => entry.key).toList();
+      } else {
+        newEntityMap[category] = entities[category].toList();
+        newEntityMap[category].sort();
       }
     }
     return newEntityMap;

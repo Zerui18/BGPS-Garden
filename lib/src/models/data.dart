@@ -35,28 +35,6 @@ class Entity implements Comparable {
     } else {
       images = [];
     }
-    // List<EntityLocation> locations;
-
-    /// `data['locations']` is in the format of `"trail-01/route-09,trail-02/route-06"`.
-    // if (data.containsKey('locations')) {
-    //   final List<String> strings = data['locations'].split(',');
-    //   // There may be trailing commas, so need to filter out invalid values.
-    //   strings.removeWhere((value) => value == null || value.isEmpty);
-    //   locations = [];
-    //   strings.forEach((value) {
-    //     final split = value.split('/');
-    //     final trailKey = SectionKey(
-    //       id: int.tryParse(split.first.split('-').last),
-    //     );
-    //     final location = EntityLocation(
-    //       trailLocationKey: TrailLocationKey(
-    //         trailKey: trailKey,
-    //         id: int.tryParse(split.last.split('-').last),
-    //       ),
-    //     );
-    //     if (location.isValid) locations.add(location);
-    //   });
-    // }
 
     return Entity(
       key: EntityKey(category: category, id: id),
@@ -144,123 +122,6 @@ class EntityLocation {
   bool get isValid => trailLocationKey.isValid;
 }
 
-/// A [TrailLocation] is a point on the trail
-class TrailLocation {
-  final TrailLocationKey key;
-  final String name;
-  final String image;
-  final String smallImage;
-  final LatLng coordinates;
-  final List<EntityPosition> entityPositions;
-  const TrailLocation({
-    this.key,
-    this.name,
-    this.image,
-    this.smallImage,
-    this.coordinates,
-    this.entityPositions,
-  });
-  factory TrailLocation.fromJson({
-    @required TrailLocationKey key,
-    @required SectionKey trailKey,
-    @required dynamic data,
-  }) {
-    List<EntityPosition> entityPositions;
-    if (data.containsKey('points')) {
-      entityPositions = [];
-      for (dynamic point in data['points']) {
-        final entityPosition = EntityPosition.fromJson(point);
-        if (entityPosition.isValid) entityPositions.add(entityPosition);
-      }
-      entityPositions.sort((a, b) => a.left.compareTo(b.left));
-    }
-
-    return TrailLocation(
-      key: key,
-      name: data['title'],
-      image: data['imageRef'],
-      smallImage: data['smallImage'],
-      coordinates: data.containsKey('latitude')
-          ? LatLng(data['latitude'], data['longitude'])
-          : null,
-      entityPositions: entityPositions,
-    );
-  }
-
-  bool get isValid {
-    return key.isValid &&
-        name != null &&
-        image != null &&
-        smallImage != null &&
-        coordinates != null &&
-        entityPositions != null;
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is TrailLocation &&
-            key == other.key &&
-            name == other.name &&
-            image == other.image &&
-            smallImage == other.smallImage &&
-            coordinates == other.coordinates &&
-            listEquals(entityPositions, other.entityPositions);
-  }
-
-  @override
-  int get hashCode => hashValues(
-        key,
-        name,
-        image,
-        smallImage,
-        coordinates,
-        hashList(entityPositions),
-      );
-}
-
-class EntityPosition {
-  final EntityKey entityKey;
-  final double left;
-  final double top;
-  final num size;
-  const EntityPosition({
-    this.entityKey,
-    this.left,
-    this.top,
-    this.size,
-  });
-
-  factory EntityPosition.fromJson(dynamic data) {
-    return EntityPosition(
-      entityKey: EntityKey(
-        category: data['params']['category'],
-        id: data['params']['id'],
-      ),
-      left: data['left'],
-      top: data['top'],
-      size: data['size'],
-    );
-  }
-
-  bool get isValid {
-    return entityKey.isValid && left != null && top != null && size != null;
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is EntityPosition &&
-            entityKey == other.entityKey &&
-            left == other.left &&
-            top == other.top &&
-            size == other.size;
-  }
-
-  @override
-  int get hashCode => hashValues(entityKey, left, top, size);
-}
-
 class HistoricalData {
   final int id;
   final String description;
@@ -284,11 +145,11 @@ class HistoricalData {
     return HistoricalData(
       id: key,
       description: data['description'],
-      image: data['imageRef'],
-      newImage: data['newImageRef'],
-      name: data['name'],
-      height: data['height'],
-      width: data['width'],
+      image: data['imageRef'] ?? '',
+      newImage: data['newImageRef'] ?? '',
+      name: data['name'] ?? Random.secure().nextDouble().toString(),
+      height: data['height'] ?? 0,
+      width: data['width'] ?? 0,
     );
   }
 

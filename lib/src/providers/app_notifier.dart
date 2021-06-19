@@ -143,20 +143,12 @@ class AppNotifier extends ChangeNotifier {
       return;
     }
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     final heightTooSmall = height - Sizes.kBottomHeight < 100;
     final topPadding = MediaQuery.of(context).padding.top;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
-    final mapNotifier = Provider.of<MapNotifier>(context, listen: false);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     if (isHome || routeInfo.dataKey is SectionKey) {
       _state = 0;
-      mapNotifier.bottomSheetHeight = heightTooSmall
-          ? Sizes.kBottomHeight -
-              Sizes.hEntityButtonHeight -
-              Sizes.hBottomBarHeight -
-              8
-          : Sizes.kBottomHeight - Sizes.hBottomBarHeight;
       bottomSheetNotifier.snappingPositions.value = [
         0,
         if (!heightTooSmall)
@@ -171,27 +163,6 @@ class AppNotifier extends ChangeNotifier {
             ? height - Sizes.hBottomBarHeight - bottomPadding
             : height - Sizes.tCollapsedHeight - bottomPadding,
       ];
-      if (isHome) {
-        if (!disableDragging) mapNotifier.animateBackToCenter(adjusted: true);
-      } else {
-        final adjusted = bottomSheetNotifier.animation.value <
-                height - Sizes.kCollapsedHeight &&
-            !heightTooSmall;
-        // mapNotifier.animateToTrail(
-        //   locations: FirebaseData.getTrail(
-        //     context: context,
-        //     key: routeInfo.dataKey,
-        //     listen: false,
-        //   ).values.toList(),
-        //   adjusted: adjusted,
-        //   mapSize: Size(
-        //     width,
-        //     adjusted
-        //         ? height - Sizes.kBottomHeight - bottomPadding
-        //         : height - Sizes.hBottomBarHeight - bottomPadding,
-        //   ),
-        // );
-      }
     } else {
       _state = 1;
       bottomSheetNotifier.snappingPositions.value = [
@@ -199,38 +170,6 @@ class AppNotifier extends ChangeNotifier {
         if (!heightTooSmall) height - Sizes.kBottomHeight - bottomPadding,
         height - Sizes.kCollapsedHeight - bottomPadding,
       ];
-      final adjusted = bottomSheetNotifier.animation.value <
-              height - Sizes.kCollapsedHeight &&
-          !heightTooSmall;
-      if (routeInfo.dataKey is EntityKey) {
-        Provider.of<FilterNotifier>(context, listen: false).unfocusSearchBar();
-        final firebaseData = Provider.of<FirebaseData>(context, listen: false);
-        // mapNotifier.animateToEntity(
-        //   entity: FirebaseData.getEntity(
-        //     context: context,
-        //     key: routeInfo.dataKey,
-        //     listen: false,
-        //   ),
-        //   trails: firebaseData.trails,
-        //   adjusted: adjusted,
-        //   mapSize: Size(
-        //     width,
-        //     adjusted
-        //         ? height - Sizes.kBottomHeight - bottomPadding
-        //         : height - Sizes.hBottomBarHeight - bottomPadding,
-        //   ),
-        // );
-      } else {
-        // mapNotifier.animateToLocation(
-        //   location: FirebaseData.getSection(
-        //     context: context,
-        //     key: routeInfo.dataKey,
-        //     listen: false,
-        //   ),
-        //   adjusted: adjusted,
-        //   changeMarkerColor: true,
-        // );
-      }
     }
     if (notify) notifyListeners();
     bottomSheetNotifier

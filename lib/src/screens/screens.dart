@@ -14,5 +14,4 @@ export 'explore/section/location_overview_page.dart';
 export 'history/history.dart';
 export 'map/map.dart';
 export 'map/map_data.dart';
-export 'map/map_notifier.dart';
 export 'onboarding/onboarding.dart';

@@ -15,12 +15,8 @@ enum DistanceSortingState {
 }
 
 class _FilterDrawerState extends State<FilterDrawer> {
-  final _distanceSortingState = ValueNotifier(DistanceSortingState.none);
-  Timer _errorFadeOutTimer;
-
   @override
   void dispose() {
-    _distanceSortingState.dispose();
     super.dispose();
   }
 
@@ -45,7 +41,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                   child: Text(
                     'Filter',
-                    style: Theme.of(context).textTheme.display2,
+                    style: Theme.of(context).textTheme.headline3,
                   ),
                 ),
                 Column(
@@ -66,10 +62,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       builder: (context, selectedTrailKeys, child) {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
-                          children: FirebaseData.sectionNames
-                              .asMap()
-                              .entries
-                              .map((trailEntry) {
+                          children:
+                              FirebaseData.getSectionNames(context: context)
+                                  .asMap()
+                                  .entries
+                                  .map((trailEntry) {
                             return CheckboxListTile(
                               dense: true,
                               controlAffinity: ListTileControlAffinity.trailing,
@@ -102,112 +99,6 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         );
                       },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 28, 16, 12),
-                      child: Text(
-                        'Sort',
-                        style: Theme.of(context).textTheme.subtitle,
-                      ),
-                    ),
-                    Selector<FilterNotifier, bool>(
-                      selector: (context, filterNotifier) {
-                        return filterNotifier.isSortedByDistance;
-                      },
-                      builder: (context, groupValue, child) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            RadioListTile<bool>(
-                              dense: true,
-                              controlAffinity: ListTileControlAffinity.trailing,
-                              groupValue: groupValue,
-                              value: false,
-                              title: Text(
-                                'Alphabetical',
-                                style: Theme.of(context).textTheme.body1,
-                              ),
-                              onChanged: (value) {
-                                Provider.of<FilterNotifier>(
-                                  context,
-                                  listen: false,
-                                ).toggleSortByDist(context);
-                              },
-                            ),
-                            RadioListTile<bool>(
-                              dense: true,
-                              controlAffinity: ListTileControlAffinity.trailing,
-                              groupValue: groupValue,
-                              value: true,
-                              title: Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Distance',
-                                    style: Theme.of(context).textTheme.body1,
-                                  ),
-                                  Spacer(),
-                                  ValueListenableBuilder<DistanceSortingState>(
-                                    valueListenable: _distanceSortingState,
-                                    builder: (context, value, _) {
-                                      Widget child = SizedBox.shrink(
-                                        key: ObjectKey(value),
-                                      );
-                                      if (value ==
-                                          DistanceSortingState.loading) {
-                                        child = SizedBox(
-                                          key: ObjectKey(value),
-                                          height: 16,
-                                          width: 16,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                          ),
-                                        );
-                                      } else if (value !=
-                                          DistanceSortingState.none) {
-                                        child = Text(
-                                          value ==
-                                                  DistanceSortingState
-                                                      .locationPermissionDenied
-                                              ? 'Permission\ndenied'
-                                              : 'Location\noff',
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            height: 1,
-                                            color: Theme.of(context).errorColor,
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        );
-                                      }
-                                      return CustomAnimatedSwitcher(
-                                        child: child,
-                                        alignment: Alignment.centerRight,
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                              onChanged: (value) async {
-                                _errorFadeOutTimer?.cancel();
-                                _distanceSortingState.value =
-                                    DistanceSortingState.loading;
-                                _distanceSortingState.value =
-                                    await Provider.of<FilterNotifier>(
-                                  context,
-                                  listen: false,
-                                ).toggleSortByDist(context);
-                                if (_distanceSortingState.value !=
-                                    DistanceSortingState.none) {
-                                  _errorFadeOutTimer =
-                                      Timer(const Duration(seconds: 3), () {
-                                    _distanceSortingState.value =
-                                        DistanceSortingState.none;
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    )
                   ],
                 ),
                 const SizedBox.shrink(),

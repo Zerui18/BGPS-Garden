@@ -34,9 +34,8 @@ class EntityListPage extends StatelessWidget {
 
     return CustomAnimatedSwitcher(
       child: Stack(
-        key: ValueKey(filterNotifier.searchTerm +
-            categoriesEntityCount.values.join() +
-            filterNotifier.isSortedByDistance.toString()),
+        key: ValueKey(
+            filterNotifier.searchTerm + categoriesEntityCount.values.join()),
         children: <Widget>[
           CustomScrollView(
             controller: scrollController,
@@ -210,9 +209,9 @@ class _FaunaListCategoriesState extends State<FaunaListCategories>
                                 horizontal: 8 - headerMorphRatio * 8,
                               ),
                               alignment: Alignment.centerLeft,
-                              child: Text(
-                                categories[i][0].toUpperCase() +
-                                    categories[i].substring(1),
+                              child: Text('hi',
+                                // categories[i][0].toUpperCase() +
+                                //     categories[i].substring(1),
                                 style: Theme.of(context).textTheme.subtitle,
                               ),
                             ),

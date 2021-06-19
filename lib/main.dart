@@ -20,7 +20,6 @@ class _HcGardenAppState extends State<HcGardenApp> {
 
   /// An instance of [Location]
   final _themeNotifier = ThemeNotifier(null);
-  final _mapNotifier = MapNotifier();
   bool _firstTime = false;
 
   @override
@@ -32,7 +31,6 @@ class _HcGardenAppState extends State<HcGardenApp> {
       final isDark = prefs.getBool('isDark');
       _firstTime = isDark == null;
       _themeNotifier.value = isDark ?? false;
-      _mapNotifier.mapType = MapType.values[prefs.getInt('mapType') ?? 1];
     });
 
     // Handle firebase data
@@ -52,7 +50,6 @@ class _HcGardenAppState extends State<HcGardenApp> {
   @override
   void dispose() {
     _themeNotifier.dispose();
-    _mapNotifier.dispose();
     super.dispose();
   }
 
@@ -67,10 +64,6 @@ class _HcGardenAppState extends State<HcGardenApp> {
         // ThemeNotifier
         ChangeNotifierProvider.value(
           value: _themeNotifier,
-        ),
-        // MapNotifier
-        ChangeNotifierProvider.value(
-          value: _mapNotifier,
         ),
         // Main AppNotifier in changed of main app flow
         ChangeNotifierProvider(
@@ -144,34 +137,6 @@ class _MyHomePageState extends State<MyHomePage>
   TabController _tabController;
   double topPadding;
   double height;
-
-  /// An instance of [Location]
-  final _location = Location();
-  MapNotifier _mapNotifier;
-
-  /// Check if location permission is on
-  void _checkPermission() async {
-    var _perm = await _location.hasPermission();
-    var granted = (_perm == PermissionStatus.granted ||
-        _perm == PermissionStatus.grantedLimited);
-    if (!granted) {
-      _perm = await _location.requestPermission();
-    }
-    _mapNotifier.permissionEnabled = granted;
-    if (granted) {
-      checkGPS();
-    }
-  }
-
-  /// Check if GPS itself is turned on
-  void checkGPS() async {
-    var isOn = await _location.serviceEnabled();
-    if (!isOn) {
-      isOn = await _location.requestService();
-    }
-    _mapNotifier.gpsOn = isOn;
-    if (isOn) _mapNotifier.rebuildMap();
-  }
 
   Future<bool> onBack(BuildContext context) async {
     final scaffoldState = Scaffold.of(context);
@@ -252,17 +217,13 @@ class _MyHomePageState extends State<MyHomePage>
     final bottomPadding = MediaQuery.of(context).padding.bottom;
     final heightTooSmall = height - Sizes.kBottomHeight < 100;
     final appNotifier = context.provide<AppNotifier>(listen: false);
-    _mapNotifier = context.provide<MapNotifier>(listen: false);
     if (!_init) {
       if (widget.firstTime) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           await Navigator.of(context).push(CrossFadePageRoute(
             builder: (context) => const OnboardingPage(),
           ));
-          _checkPermission();
         });
-      } else {
-        _checkPermission();
       }
       Provider.of<BottomSheetNotifier>(context, listen: false)
         ..snappingPositions.value = [

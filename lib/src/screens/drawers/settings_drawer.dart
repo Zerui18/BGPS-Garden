@@ -8,10 +8,7 @@ class SettingsDrawer extends StatefulWidget {
 }
 
 class _SettingsDrawerState extends State<SettingsDrawer> {
-  void _changeMapType(MapType newType) {
-    final mapNotifier = context.provide<MapNotifier>(listen: false);
-    mapNotifier.mapType = newType;
-  }
+  void _changeMapType(MapType newType) {}
 
   @override
   Widget build(BuildContext context) {
@@ -74,38 +71,6 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
                         'Map Type',
                         style: Theme.of(context).textTheme.subtitle,
                       ),
-                    ),
-                    Selector<MapNotifier, MapType>(
-                      selector: (context, m) => m.mapType,
-                      builder: (context, mapType, child) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            RadioListTile<MapType>(
-                              dense: true,
-                              controlAffinity: ListTileControlAffinity.trailing,
-                              groupValue: mapType,
-                              value: MapType.normal,
-                              title: Text(
-                                'Normal',
-                                style: Theme.of(context).textTheme.body1,
-                              ),
-                              onChanged: _changeMapType,
-                            ),
-                            RadioListTile<MapType>(
-                              dense: true,
-                              controlAffinity: ListTileControlAffinity.trailing,
-                              groupValue: mapType,
-                              value: MapType.hybrid,
-                              title: Text(
-                                'Satellite',
-                                style: Theme.of(context).textTheme.body1,
-                              ),
-                              onChanged: _changeMapType,
-                            ),
-                          ],
-                        );
-                      },
                     ),
                   ],
                 ),
