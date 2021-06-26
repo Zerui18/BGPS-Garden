@@ -522,74 +522,79 @@ class _EntityListRowState extends State<EntityListRow> {
 
   @override
   Widget build(BuildContext context) {
-    final topPadding = MediaQuery.of(context).padding.top;
-    final height = MediaQuery.of(context).size.height;
+    try {
+      final topPadding = MediaQuery.of(context).padding.top;
+      final height = MediaQuery.of(context).size.height;
 
-    final searchTerm =
-        context.provide<FilterNotifier>(listen: false).searchTerm;
-    _rowHeight = searchTerm.isEmpty ? 104 : 84;
+      final searchTerm =
+          context.provide<FilterNotifier>(listen: false).searchTerm;
+      _rowHeight = searchTerm.isEmpty ? 104 : 84;
 
-    _previousCategoriesHeight = 0;
-    if (widget.entity.key.category != 'flora') {
-      _previousCategoriesHeight += 48;
-      for (final entry in widget.categoriesEntityCount.entries) {
-        if (entry.key == widget.entity.key.category) break;
-        _previousCategoriesHeight += 48 + _rowHeight * entry.value;
+      _previousCategoriesHeight = 0;
+      if (widget.entity.key.category != 'flora') {
+        _previousCategoriesHeight += 48;
+        for (final entry in widget.categoriesEntityCount.entries) {
+          if (entry.key == widget.entity.key.category) break;
+          _previousCategoriesHeight += 48 + _rowHeight * entry.value;
+        }
       }
-    }
 
-    _bottomSheetAnimation = Tween<double>(
-      begin: 0,
-      end: 1 / (height - Sizes.kBottomHeight),
-    ).animate(
-      Provider.of<BottomSheetNotifier>(context, listen: false).animation,
-    );
-    _topSpaceTween = Tween(
-      begin: Sizes.hEntityButtonHeightCollapsed + 24 + topPadding,
-      end: Sizes.kBottomHeight - Sizes.hBottomBarHeight + 8,
-    );
-    _contentOffsetTween = Tween(
-      begin: topPadding + 16 - (_rowHeight - 64) / 2,
-      end: 16 - (_rowHeight - 64) / 2,
-    );
+      _bottomSheetAnimation = Tween<double>(
+        begin: 0,
+        end: 1 / (height - Sizes.kBottomHeight),
+      ).animate(
+        Provider.of<BottomSheetNotifier>(context, listen: false).animation,
+      );
+      _topSpaceTween = Tween(
+        begin: Sizes.hEntityButtonHeightCollapsed + 24 + topPadding,
+        end: Sizes.kBottomHeight - Sizes.hBottomBarHeight + 8,
+      );
+      _contentOffsetTween = Tween(
+        begin: topPadding + 16 - (_rowHeight - 64) / 2,
+        end: 16 - (_rowHeight - 64) / 2,
+      );
 
-    final heroTag = widget.entity.key;
-    return InkWell(
-      child: InfoRow(
-        height: _rowHeight,
-        heroTag: heroTag,
-        image: widget.entity.smallImage,
-        title: widget.entity.name,
-        titleStyle: searchTerm.isEmpty
-            ? Theme.of(context).textTheme.subhead.copyWith(
-                  fontSize: 16,
-                )
-            : null,
-        subtitle: searchTerm.isEmpty
-            ? widget.entity.description
-            : widget.entity.sciName,
-        subtitleStyle:
-            searchTerm.isEmpty ? null : Theme.of(context).textTheme.overline,
-        tapToAnimate: false,
-        isThreeLine: searchTerm.isEmpty,
-      ),
-      onTap: () {
-        context.provide<AppNotifier>(listen: false).push(
-              context: context,
-              routeInfo: RouteInfo(
-                name: widget.entity.name,
-                dataKey: widget.entity.key,
-                route: SlidingUpPageRoute(
-                  getSourceTop: _getSourceTop,
-                  sourceHeight: _rowHeight,
-                  getContentOffset: _getContentOffset,
-                  builder: (context) => EntityDetailsPage(
-                    entityKey: widget.entity.key,
+      final heroTag = widget.entity.key;
+      return InkWell(
+        child: InfoRow(
+          height: _rowHeight,
+          heroTag: heroTag,
+          image: widget.entity.smallImage,
+          title: widget.entity.name,
+          titleStyle: searchTerm.isEmpty
+              ? Theme.of(context).textTheme.subhead.copyWith(
+                    fontSize: 16,
+                  )
+              : null,
+          subtitle: searchTerm.isEmpty
+              ? widget.entity.description
+              : widget.entity.sciName,
+          subtitleStyle:
+              searchTerm.isEmpty ? null : Theme.of(context).textTheme.overline,
+          tapToAnimate: false,
+          isThreeLine: searchTerm.isEmpty,
+        ),
+        onTap: () {
+          context.provide<AppNotifier>(listen: false).push(
+                context: context,
+                routeInfo: RouteInfo(
+                  name: widget.entity.name,
+                  dataKey: widget.entity.key,
+                  route: SlidingUpPageRoute(
+                    getSourceTop: _getSourceTop,
+                    sourceHeight: _rowHeight,
+                    getContentOffset: _getContentOffset,
+                    builder: (context) => EntityDetailsPage(
+                      entityKey: widget.entity.key,
+                    ),
                   ),
                 ),
-              ),
-            );
-      },
-    );
+              );
+        },
+      );
+    }
+    catch (e) {
+      return SizedBox(height: 0,);
+    }
   }
 }

@@ -23,10 +23,20 @@ class FirebaseData {
     @required EntityKey key,
     bool listen = true,
   }) {
-    return Provider.of<FirebaseData>(
-      context,
-      listen: listen,
-    ).entities[key.category][key.id];
+    try {
+      return Provider.of<FirebaseData>(
+        context,
+        listen: listen,
+      ).entities[key.category][key.id];
+    }
+    catch (e) {
+      print("entity error");
+      print(Provider.of<FirebaseData>(
+        context,
+        listen: listen,
+      ).entities);
+      print(e);
+    }
   }
 
   static SectionData getSection({

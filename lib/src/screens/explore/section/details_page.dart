@@ -63,6 +63,19 @@ class _SectionDetailsPageState extends State<SectionDetailsPage> {
     entityKeys.sort((a, b) {
       return a.id.compareTo(b.id);
     });
+
+    List<Widget> kids = [];
+
+    for (var i = 0; i < entityKeys.length; i++) {
+      kids.add(EntityListRow(
+        entity: FirebaseData.getEntity(
+          context: context, key: entityKeys[i]),
+        categoriesEntityCount: {},
+        index: i,
+        scrollController: _scrollController,
+      ));
+    }
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: Sizes.kBottomBarHeight + MediaQuery.of(context).padding.bottom,
@@ -104,21 +117,46 @@ class _SectionDetailsPageState extends State<SectionDetailsPage> {
               padding: const EdgeInsets.only(
                 bottom: 8,
               ),
-              sliver: SliverFixedExtentList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return EntityListRow(
-                      entity: FirebaseData.getEntity(
-                          context: context, key: entityKeys[index]),
-                      categoriesEntityCount: {},
-                      index: index,
-                      scrollController: _scrollController,
-                    );
-                  },
-                  childCount: entityKeys.length,
+              sliver: SliverToBoxAdapter(
+                child: Container(
+                  height: entityKeys.length * 104.0,
+                  // width: 200,
+                  child: Column(
+                    children: kids,
+                  ),
                 ),
-                itemExtent: 104,
               ),
+              // sliver: SliverFixedExtentList(
+              //   delegate: SliverChildBuilderDelegate(
+              //     (context, index) {
+              //       List<Widget> kids = [];
+
+              //       // for (var i = 0; i < entityKeys.length; i++) {
+              //       //   kids.add(EntityListRow(
+              //       //     entity: FirebaseData.getEntity(
+              //       //       context: context, key: entityKeys[i]),
+              //       //     categoriesEntityCount: {},
+              //       //     index: i,
+              //       //     scrollController: _scrollController,
+              //       //   ));
+              //       // }
+
+              //       return SliverToBoxAdapter(
+              //         child: Container(
+              //           child: Column(
+              //             children: [
+              //               Text("rwew"),
+              //             ],
+              //           ),
+              //           height: 20000,
+              //           width: 1000,
+              //         ),
+              //       );
+              //     },
+              //     childCount: 1,
+              //   ),
+              //   itemExtent: entityKeys.length * 104.0,
+              // ),
             ),
           ],
         ),
