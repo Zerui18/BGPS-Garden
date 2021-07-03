@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:791973546893:android:555a039cd5a19024bf4bc4",
+        "mobilesdk_app_id": "1:791973546893:android:6ef28fc9dc8bff07bf4bc4",
         "android_client_info": {
-          "package_name": "com.hci.bgpsgarden"
+          "package_name": "com.scs.ecogarden"
         }
       },
       "oauth_client": [
@@ -30,6 +30,13 @@
             {
               "client_id": "791973546893-5n0a0kkc4g2hvjpe318kqivk5806hdmt.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "791973546893-rhuu27ilv3aia1tpn71gp2hcv2g01one.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hci.bgpsgarden"
+              }
             }
           ]
         }

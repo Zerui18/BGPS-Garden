@@ -1,4 +1,4 @@
-package com.bgps.ecogarden;
+package com.scs.ecogarden;
 
 import io.flutter.embedding.android.FlutterActivity;
 
