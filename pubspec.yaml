@@ -57,6 +57,7 @@ flutter:
     - assets/images/flora.jpg
     - assets/images/fauna.jpg
     - assets/images/bgps-logo.jpg
+    - assets/images/pin.png
     - assets/images/map.png
     - assets/images/irs.png
     - assets/images/app_logo/app_logo.png
