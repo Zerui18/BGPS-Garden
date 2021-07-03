@@ -1,0 +1,178 @@
+import 'package:bgps_garden/src/library.dart';
+import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
+
+extension GlobalKeyExtension on GlobalKey {
+  Rect get globalPaintBounds {
+    final renderObject = currentContext?.findRenderObject();
+    var translation = renderObject?.getTransformTo(null)?.getTranslation();
+    if (translation != null && renderObject.paintBounds != null) {
+      return renderObject.paintBounds
+          .shift(Offset(translation.x, translation.y));
+    } else {
+      return null;
+    }
+  }
+}
+
+class MapWidget extends StatefulWidget {
+  const MapWidget({Key key}) : super(key: key);
+
+  @override
+  _MapWidgetState createState() => _MapWidgetState();
+}
+
+class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
+  void rebuild() {
+    setState(() {});
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // Needed because of a bug with Google Maps not showing, after going back from recents
+      // Don't know if this works consistently, 1s randomly chosen
+      Future.delayed(const Duration(seconds: 1), rebuild);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final containerKey = GlobalKey();
+    final containerKey2 = GlobalKey();
+    final ValueNotifier<Matrix4> notifier = ValueNotifier(Matrix4.identity());
+
+    return CustomAnimatedSwitcher(
+      fadeIn: true,
+      child: SafeArea(
+        child: MatrixGestureDetector(
+          shouldRotate: false,
+          onMatrixUpdate: (m, tm, sm, rm) {
+            notifier.value = m;
+          },
+          child: AnimatedBuilder(
+            animation: notifier,
+            builder: (ctx, child) {
+              // print(notifier.value.getMaxScaleOnAxis());
+              // notifier.value.setRotationX(3.14 / 8);
+              // print(containerKey.globalPaintBounds);
+              // print((containerKey.globalPaintBounds == null) ? 0 : containerKey.globalPaintBounds.left);
+              // Matrix4 output = Matrix4.copy(notifier.value);
+              // output.setTranslation(notifier.value.getTranslation());
+              // output.setRotationX(0);
+              // output.setRotationY(0);
+              // output.setRotationZ(0);
+
+              return Transform(
+                transform: notifier.value,
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/map.png"),
+                        ),
+                      ),
+                      padding: EdgeInsets.all(256),
+                      alignment: Alignment(0, -0.5),
+                    ),
+                    Positioned(
+                      top: 325,
+                      left: 30,
+                      height: 40,
+                      width: 40,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                        ),
+                        key: containerKey,
+                      ),
+                    ),
+                    Transform(
+                      transform: Matrix4.inverted(notifier.value),
+                      child: Container(
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              height: 40,
+                              width: 200,
+                              left: (containerKey.globalPaintBounds == null) ? 0 : containerKey.globalPaintBounds.left,
+                              top: (containerKey.globalPaintBounds == null) ? 0 : containerKey.globalPaintBounds.top,
+                              child: Container(
+                                // decoration: BoxDecoration(
+                                //   color: Colors.white,
+                                // ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.pin_drop,
+                                      color: Colors.red,
+                                    ),
+                                    Text(
+                                      "Butterfly Garden",
+                                      style: TextStyle(
+                                        shadows: <Shadow>[
+                                          Shadow(
+                                            offset: Offset(1.0, 1.0),
+                                            blurRadius: 2.0,
+                                            color: Color.fromARGB(64, 128, 128, 128),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ]
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Updates default markers and polygons of [MapNotifier] by listening to the firebase data stream
+class MapDataWidget extends StatefulWidget {
+  final Stream<FirebaseData> firebaseDataStream;
+  final Widget child;
+  const MapDataWidget({
+    Key key,
+    @required this.firebaseDataStream,
+    @required this.child,
+  }) : super(key: key);
+
+  @override
+  _MapDataWidgetState createState() => _MapDataWidgetState();
+}
+
+class _MapDataWidgetState extends State<MapDataWidget> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}
