@@ -106,6 +106,8 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
       [320.0, 70.0],
     ];
 
+    // print(MediaQuery.of(context).size.width);
+
     void updatePositions() {
       setState(() {
         for (int i = 0; i < pinLocations.length; i++) {
@@ -140,8 +142,8 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
         // print(pinLocations[i][0]);
         stackChildren.add(
           Positioned(
-            left: pinLocations[i][0],
-            top: MediaQuery.of(context).size.height * 0.05 + pinLocations[i][1],
+            left: MediaQuery.of(context).size.width * (pinLocations[i][0] / 420),
+            top: MediaQuery.of(context).size.height * 0.05 + MediaQuery.of(context).size.height * (pinLocations[i][1] / 840),
             child: Container(
               decoration: BoxDecoration(
                 // color: Colors.black,
