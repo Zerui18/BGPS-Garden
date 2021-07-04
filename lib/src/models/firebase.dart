@@ -1,19 +1,46 @@
 import 'package:bgps_garden/src/library.dart';
 import 'dart:collection';
+import 'dart:convert';
+
+final List<String> sectionNames = [
+  "Desert Plants",
+  "Butterfly Garden",
+  "Native Plants",
+  "Fruit Trees",
+  "Ornamental Plants",
+  "Community Garden",
+  "Fern Garden",
+  "Herbs & Spices",
+];
 
 class FirebaseData {
-  final EntityMap entities;
+  final EntityMap floraEntities;
+  final EntityMap faunaEntities;
   final SectionMap sections;
-  final List<String> sectionNames;
   final List<HistoricalData> historicalDataList;
   final List<AboutPageData> aboutPageDataList;
   final Set<Polygon> mapPolygons;
   final List<dynamic> sectionPinLocations;
 
+  void printObject(Object object) {
+    // Encode your object and then decode your object to Map variable
+    Map jsonMapped = json.decode(json.encode(object)); 
+
+    // Using JsonEncoder for spacing
+    JsonEncoder encoder = new JsonEncoder.withIndent('  '); 
+
+    // encode it to string
+    String prettyPrint = encoder.convert(jsonMapped); 
+
+    // print or debugPrint your object
+    debugPrint(prettyPrint); 
+  }
+
+
   const FirebaseData(
-      {this.entities,
+      {this.floraEntities,
+      this.faunaEntities,
       this.sections,
-      this.sectionNames,
       this.historicalDataList,
       this.aboutPageDataList,
       this.mapPolygons,
@@ -25,21 +52,24 @@ class FirebaseData {
     bool listen = true,
   }) {
     try {
-      return Provider.of<FirebaseData>(
+      final data = Provider.of<FirebaseData>(
         context,
         listen: listen,
-      ).entities[key.category][key.id];
+      );
+      if (data.floraEntities.containsKey(key.category))
+        return data.floraEntities[key.category].firstWhere((entity) => entity.key.id == key.id);
+      else
+        return data.faunaEntities[key.category].firstWhere((entity) => entity.key.id == key.id);
     } catch (e) {
-      print("entity error");
-      print(Provider.of<FirebaseData>(
+      print("[FirebaseData] tried to call getEntity with nonexistent key $key");
+      Provider.of<FirebaseData>(
         context,
-        listen: listen,
-      ).entities);
-      print(e);
+        listen: false,
+      ).floraEntities.forEach((key, value) => value.forEach((entity) => print(entity)));
     }
   }
 
-  static SectionData getSection({
+  static SectionMap getSections({
     @required BuildContext context,
     @required SectionKey key,
     bool listen = true,
@@ -47,13 +77,18 @@ class FirebaseData {
     return Provider.of<FirebaseData>(
       context,
       listen: listen,
-    ).sections[key];
+    ).sections;
   }
 
-  static List<String> getSectionNames(
-      {@required BuildContext context, bool listen = true}) {
-    final provider = Provider.of<FirebaseData>(context, listen: listen);
-    return provider != null ? provider.sectionNames : [];
+  static List<Entity> getEntitiesOfSection({
+    @required BuildContext context,
+    @required String key,
+    bool listen = true,
+  }) {
+    return Provider.of<FirebaseData>(
+      context,
+      listen: listen,
+    ).floraEntities[key] ?? [];
   }
 
   /// Needed when the data is a list, to return a map anyways
@@ -67,34 +102,47 @@ class FirebaseData {
   /// Creates an instance of [FirebaseData] based on the `data` supplied.
   /// `data` should be the JSON data of the entire database.
   factory FirebaseData.fromJson(dynamic data) {
-    final entities = EntityMap();
+    final floraEntities = EntityMap();
+    final faunaEntities = EntityMap();
     final sections = SectionMap();
-    final List<String> sectionNames = [];
     final List<HistoricalData> historicalDataList = [];
     final List<AboutPageData> aboutPageDataList = [];
     final Set<Polygon> mapPolygons = {};
     final List<dynamic> pinPositions = [];
 
-    // Adding entities
-    entities.addEntities(
-      category: 'flora',
-      entitiesJson: _getMap(data['flora']),
-    );
+    Map<int, List<EntityKey>> sectionToFlora = {};
+    Map<int, List<Map>> sectionToFloraData = {};
+
+    // Add fauna entities
     data['fauna'].forEach((category, value) {
-      entities.addEntities(
+      faunaEntities.addEntities(
         category: category,
         entitiesJson: _getMap(value),
       );
     });
 
     // Adding sections
-    Map<int, List<EntityKey>> sectionToFlora = {};
     _getMap(data['flora']).forEach((floraId, floraValue) {
       int sectionId = floraValue['section'];
       if (!sectionToFlora.containsKey(sectionId)) {
         sectionToFlora[sectionId] = [];
       }
+      if (!sectionToFloraData.containsKey(sectionId)) {
+        sectionToFloraData[sectionId] = [];
+      }
       sectionToFlora[sectionId].add(EntityKey(category: 'flora', id: floraId));
+      dynamic flora = _getMap(floraValue);
+      flora['id'] = floraId;
+      sectionToFloraData[sectionId].add(flora);
+    });
+
+    // Add flora entities
+    sectionToFloraData.forEach((section, floras) {
+      floraEntities.addEntities(
+        category: sectionNames[section],
+        entitiesJson:
+            Map.fromIterable(floras, key: (f) => f['id'], value: (f) => f),
+      );
     });
 
     data['fauna'].forEach((category, value) {
@@ -116,7 +164,6 @@ class FirebaseData {
           name: section['name']);
       final key = SectionKey(id: sectionId);
       sections[key] = sectionData;
-      sectionNames.add(section['name']);
       pinPositions.add([section['pin'][0] + .0, section['pin'][1] + .0]);
     });
 
@@ -135,9 +182,9 @@ class FirebaseData {
     aboutPageDataList.sort((a, b) => a.id.compareTo(b.id));
 
     return FirebaseData(
-        entities: entities,
+        floraEntities: floraEntities,
+        faunaEntities: faunaEntities,
         sections: sections,
-        sectionNames: sectionNames,
         historicalDataList: historicalDataList,
         aboutPageDataList: aboutPageDataList,
         mapPolygons: mapPolygons,

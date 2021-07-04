@@ -56,20 +56,15 @@ class _SectionDetailsPageState extends State<SectionDetailsPage> {
   Widget build(BuildContext context) {
     final bottomSheetNotifier =
         context.provide<BottomSheetNotifier>(listen: false);
-    List<EntityKey> entityKeys = FirebaseData.getSection(
-      context: context,
-      key: widget.sectionKey,
-    ).items;
-    entityKeys.sort((a, b) {
-      return a.id.compareTo(b.id);
-    });
+
+    List<Entity> entities = FirebaseData.getEntitiesOfSection(
+        context: context, key: sectionNames[widget.sectionKey.id]);
 
     List<Widget> kids = [];
 
-    for (var i = 0; i < entityKeys.length; i++) {
+    for (var i = 0; i < entities.length; i++) {
       kids.add(EntityListRow(
-        entity: FirebaseData.getEntity(
-          context: context, key: entityKeys[i]),
+        entity: entities[i],
         categoriesEntityCount: {},
         index: i,
         scrollController: _scrollController,
@@ -94,8 +89,7 @@ class _SectionDetailsPageState extends State<SectionDetailsPage> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 32, 0, 16),
                   child: Text(
-                    FirebaseData.getSectionNames(
-                        context: context)[widget.sectionKey.id],
+                    sectionNames[widget.sectionKey.id],
                     style: Theme.of(context).textTheme.headline4,
                     textAlign: TextAlign.center,
                   ),
@@ -119,7 +113,7 @@ class _SectionDetailsPageState extends State<SectionDetailsPage> {
               ),
               sliver: SliverToBoxAdapter(
                 child: Container(
-                  height: entityKeys.length * 104.0,
+                  height: entities.length * 104.0,
                   // width: 200,
                   child: Column(
                     children: kids,

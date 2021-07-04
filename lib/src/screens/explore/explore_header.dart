@@ -160,7 +160,7 @@ class TrailButtonsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sections = FirebaseData.getSectionNames(context: context);
+    dynamic sections = sectionNames;
     final _colors = [
       Colors.lightBlue,
       Colors.pink,
@@ -226,61 +226,59 @@ class TrailButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(right: 8),
-        child: Consumer<ThemeNotifier>(
-          builder: (context, themeNotifier, child) {
-            final textStyle = TextStyle(
-              fontFamily: 'Manrope',
-              fontSize: 12.5,
-              height: 1.5,
-              fontWeight: FontWeight.bold,
-            );
-            return AnimatedTheme(
-              data: themeNotifier.value
-                  ? darkThemeData.copyWith(
-                      buttonColor: Color(0xFF383838),
-                      textTheme: TextTheme(
-                        bodyText2: textStyle.copyWith(
-                          color: textColor,
-                        ),
-                      ),
-                    )
-                  : themeData.copyWith(
-                      buttonColor: color,
-                      textTheme: TextTheme(
-                        bodyText2: textStyle.copyWith(
-                          color: Colors.white,
-                        ),
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Consumer<ThemeNotifier>(
+        builder: (context, themeNotifier, child) {
+          final textStyle = TextStyle(
+            fontFamily: 'Manrope',
+            fontSize: 12.5,
+            height: 1.5,
+            fontWeight: FontWeight.bold,
+          );
+          return AnimatedTheme(
+            data: themeNotifier.value
+                ? darkThemeData.copyWith(
+                    buttonColor: Color(0xFF383838),
+                    textTheme: TextTheme(
+                      bodyText2: textStyle.copyWith(
+                        color: textColor,
                       ),
                     ),
-              child: child,
-            );
-          },
-          child: Builder(builder: (context) {
-            return FlatButton(
-              colorBrightness: Brightness.dark,
-              color: Theme.of(context).buttonColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                  )
+                : themeData.copyWith(
+                    buttonColor: color,
+                    textTheme: TextTheme(
+                      bodyText2: textStyle.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+            child: child,
+          );
+        },
+        child: Builder(builder: (context) {
+          return FlatButton(
+            colorBrightness: Brightness.dark,
+            color: Theme.of(context).buttonColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 6,
+            ),
+            child: Container(
+              height: Sizes.hTrailButtonHeight,
+              alignment: Alignment.center,
+              child: Text(
+                trailName.toUpperCase(),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyText2,
               ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 6,
-              ),
-              child: Container(
-                height: Sizes.hTrailButtonHeight,
-                alignment: Alignment.center,
-                child: Text(
-                  trailName.toUpperCase(),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyText2,
-                ),
-              ),
-              onPressed: onPressed,
-            );
-          }),
-        ),
+            ),
+            onPressed: onPressed,
+          );
+        }),
       ),
     );
   }

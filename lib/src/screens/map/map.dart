@@ -1,11 +1,21 @@
 import 'package:bgps_garden/src/library.dart';
 
+enum DeviceType { Phone, Tablet }
+
+DeviceType getDeviceType() {
+  final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+  return data.size.shortestSide < 550 ? DeviceType.Phone : DeviceType.Tablet;
+}
+
 bool periodicSyncLabels = false;
 
 void syncLabels() {
   if (periodicSyncLabels) {
-    try { _MapWidgetState.mapWidget.syncLabelsInternal(); }
-    catch (e) { print(e); }
+    try {
+      _MapWidgetState.mapWidget.syncLabelsInternal();
+    } catch (e) {
+      print(e);
+    }
   }
   new Timer(Duration(milliseconds: 200), () {
     syncLabels();
@@ -86,16 +96,6 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
   List<double> leftStart = List.filled(8, 0);
   List<dynamic> locationActions = [];
   List<dynamic> pinLocations = [];
-  List<String> sectionNames = [
-    "Cactus Garden",
-    "Butterfly Garden",
-    "Native Plants",
-    "Fruit Tree Corner",
-    "Ornamental Plants",
-    "Community Garden",
-    "Fern Garden",
-    "Herbs & Spices",
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +105,6 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
     } catch (err) {
       pinLocations = [];
     }
-
-    // print(MediaQuery.of(context).size.width);
 
     void updatePositions() {
       setState(() {
@@ -138,15 +136,31 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
 
     if (containerKeys.length > 0) {
       for (int i = 0; i < pinLocations.length; i++) {
-        // print(pinLocations[i][0]);
+
+        double correctionWidth = 1, correctionHeight = 1;
+        if (getDeviceType() == DeviceType.Tablet) {
+          if (MediaQuery.of(context).size.height < 1000) {
+            correctionWidth = 2;
+            correctionHeight = 1.8;
+          } else {
+            correctionWidth = 2 * 1.3;
+            correctionHeight = 1.8 * 1.13;
+          }
+        } else if (MediaQuery.of(context).size.height < 750) {
+          correctionWidth = 1.02;
+          correctionHeight = 1.15;
+        }
+
         stackChildren.add(
           Positioned(
-            left: MediaQuery.of(context).size.width * (pinLocations[i][0] / 420),
-            top: MediaQuery.of(context).size.height * 0.05 + MediaQuery.of(context).size.height * (pinLocations[i][1] / 840),
+            left: pinLocations[i][0] * correctionWidth,
+            top: (0.05 * MediaQuery.of(context).size.height +
+                    pinLocations[i][1]) *
+                correctionHeight,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black,
-              ),
+                  // color: Colors.black,
+                  ),
               key: containerKeys[i],
               height: 30,
               width: 30,
@@ -164,21 +178,20 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
                   context.provide<AppNotifier>(listen: false).pop(context);
                   await Future.delayed(
                       const Duration(milliseconds: 300), () {});
-                  context.provide<AppNotifier>(listen: false)
-                    ..push(
-                      context: context,
-                      routeInfo: RouteInfo(
-                        name: sectionNames[i],
-                        dataKey: sectionKey,
-                        route: CrossFadePageRoute(
-                          builder: (context) {
-                            return SectionDetailsPage(
-                              sectionKey: sectionKey,
-                            );
-                          },
+                  context.provide<AppNotifier>(listen: false).push(
+                        context: context,
+                        routeInfo: RouteInfo(
+                          name: sectionNames[i],
+                          dataKey: sectionKey,
+                          route: CrossFadePageRoute(
+                            builder: (context) {
+                              return SectionDetailsPage(
+                                sectionKey: sectionKey,
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    );
+                      );
                 },
                 child: Container(
                     height: 40,
@@ -203,8 +216,7 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
         );
       }
       periodicSyncLabels = true;
-    }
-    else {
+    } else {
       setState(() {
         for (int i = 0; i < pinLocations.length; i++) {
           containerKeys.add(GlobalKey());

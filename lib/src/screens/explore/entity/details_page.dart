@@ -57,6 +57,7 @@ class _EntityDetailsPageState extends State<EntityDetailsPage> {
       context: context,
       key: widget.entityKey,
     );
+    
     final newImages = entity.images.map(lowerRes).toList();
     return ValueListenableBuilder<double>(
       valueListenable: ModalRoute.of(context).secondaryAnimation,

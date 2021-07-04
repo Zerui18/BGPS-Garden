@@ -12,17 +12,14 @@ class EntityListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Only update when entities change
     final firebaseData = context.provide<FirebaseData>();
     if (firebaseData == null) return const SizedBox.shrink();
 
     EntityMap entities;
     if (isFlora) {
-      entities = EntityMap();
-      entities['flora'] = firebaseData.entities['flora'];
+      entities = firebaseData.floraEntities;
     } else {
-      entities = firebaseData.entities.clone();
-      entities.remove('flora');
+      entities = firebaseData.faunaEntities;
     }
 
     final filterNotifier = context.provide<FilterNotifier>();
@@ -47,7 +44,7 @@ class EntityListPage extends StatelessWidget {
                 ),
               ),
               for (final entry in newEntityMap.entries) ...[
-                if (!isFlora) SliverEntityHeaderSpace(),
+                SliverEntityHeaderSpace(),
                 SliverEntityList(
                   categoriesEntityCount: categoriesEntityCount,
                   entities: entry.value,
@@ -61,11 +58,10 @@ class EntityListPage extends StatelessWidget {
               SliverToBoxAdapter(child: BottomPadding()),
             ],
           ),
-          if (!isFlora)
-            FaunaListCategories(
+          FaunaListCategories(
               scrollController: scrollController,
               categoriesEntityCount: categoriesEntityCount,
-            ),
+            )
         ],
       ),
     );
@@ -209,9 +205,9 @@ class _FaunaListCategoriesState extends State<FaunaListCategories>
                                 horizontal: 8 - headerMorphRatio * 8,
                               ),
                               alignment: Alignment.centerLeft,
-                              child: Text('hi',
-                                // categories[i][0].toUpperCase() +
-                                //     categories[i].substring(1),
+                              child: Text(
+                                categories[i][0].toUpperCase() +
+                                    categories[i].substring(1),
                                 style: Theme.of(context).textTheme.subtitle,
                               ),
                             ),
@@ -592,9 +588,10 @@ class _EntityListRowState extends State<EntityListRow> {
               );
         },
       );
-    }
-    catch (e) {
-      return SizedBox(height: 0,);
+    } catch (e) {
+      return SizedBox(
+        height: 0,
+      );
     }
   }
 }
