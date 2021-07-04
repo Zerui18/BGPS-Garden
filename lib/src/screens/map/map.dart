@@ -89,22 +89,22 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
   List<String> sectionNames = [
     "Cactus Garden",
     "Butterfly Garden",
-    "Native Garden",
+    "Native Plants",
     "Fruit Tree Corner",
-    "Vegetable Plot",
     "Ornamental Plants",
+    "Community Garden",
+    "Fern Garden",
+    "Herbs & Spices",
   ];
 
   @override
   Widget build(BuildContext context) {
-    pinLocations = [
-      [110.0, 63.0],
-      [30.0, 80.0],
-      [150.0, 80.0],
-      [140.0, 100.0],
-      [310.0, 40.0],
-      [320.0, 70.0],
-    ];
+    try {
+      pinLocations =
+          Provider.of<FirebaseData>(context, listen: false).sectionPinLocations;
+    } catch (err) {
+      pinLocations = [];
+    }
 
     // print(MediaQuery.of(context).size.width);
 
@@ -124,18 +124,17 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
           height: MediaQuery.of(context).size.height * 0.65,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.contain,
-              image: AssetImage('assets/images/map.png'),
-              alignment: Alignment.topCenter
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(20))
-          ),
+              image: DecorationImage(
+                  fit: BoxFit.contain,
+                  image: AssetImage('assets/images/map.png'),
+                  alignment: Alignment.topCenter),
+              borderRadius: BorderRadius.all(Radius.circular(20))),
         ),
       ),
     ];
 
     List<Widget> pins = [];
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (containerKeys.length > 0) {
       for (int i = 0; i < pinLocations.length; i++) {
@@ -146,7 +145,7 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
             top: MediaQuery.of(context).size.height * 0.05 + MediaQuery.of(context).size.height * (pinLocations[i][1] / 840),
             child: Container(
               decoration: BoxDecoration(
-                // color: Colors.black,
+                color: Colors.black,
               ),
               key: containerKeys[i],
               height: 30,
@@ -157,47 +156,52 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
 
         pins.add(
           Positioned(
-            top: (topStart[i] == null) ? 0 : (topStart[i] * 1.0) - 40,
-            left: (leftStart[i] == null) ? 0 : leftStart[i] * 1.0,
-            child: InkWell(
-              onTap: () {
-                final sectionKey = SectionKey(id: i);
-                  context.provide<AppNotifier>(listen: false).push(
-                  context: context,
-                  routeInfo: RouteInfo(
-                    name: sectionNames[i],
-                    dataKey: sectionKey,
-                    route: CrossFadePageRoute(
-                      builder: (context) {
-                        return SectionDetailsPage(
-                          sectionKey: sectionKey,
-                        );
-                      },
-                    ),
-                  ),
-                );
-              },
-              child: Container(
-                height: 40,
-                child: Row(
-                  children: [
-                    // Image(image: AssetImage("assets/images/pin.png")),
-                    Container(
-                      padding: EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                        color: Color.fromARGB(172, 255, 255, 255),
+              top: (topStart[i] == null) ? 0 : (topStart[i] * 1.0) - 40,
+              left: (leftStart[i] == null) ? 0 : leftStart[i] * 1.0,
+              child: InkWell(
+                onTap: () async {
+                  final sectionKey = SectionKey(id: i);
+                  context.provide<AppNotifier>(listen: false).pop(context);
+                  await Future.delayed(
+                      const Duration(milliseconds: 300), () {});
+                  context.provide<AppNotifier>(listen: false)
+                    ..push(
+                      context: context,
+                      routeInfo: RouteInfo(
+                        name: sectionNames[i],
+                        dataKey: sectionKey,
+                        route: CrossFadePageRoute(
+                          builder: (context) {
+                            return SectionDetailsPage(
+                              sectionKey: sectionKey,
+                            );
+                          },
+                        ),
                       ),
-                      child: Text(sectionNames[i], style: TextStyle(fontSize: 12.0)),
-                    ),
-                  ],
-                )
-              ),
-            )
-          ),
+                    );
+                },
+                child: Container(
+                    height: 40,
+                    child: Row(
+                      children: [
+                        // Image(image: AssetImage("assets/images/pin.png")),
+                        Container(
+                          padding: EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(4.0)),
+                            color: isDark
+                                ? Color.fromARGB(200, 0, 0, 0)
+                                : Color.fromARGB(200, 255, 255, 255),
+                          ),
+                          child: Text(sectionNames[i],
+                              style: TextStyle(fontSize: 12.0)),
+                        ),
+                      ],
+                    )),
+              )),
         );
       }
-
       periodicSyncLabels = true;
     }
     else {
@@ -214,6 +218,9 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
         child: Stack(
           children: [
             InteractiveViewer(
+              onInteractionStart: (ScaleStartDetails details) {
+                updatePositions();
+              },
               onInteractionEnd: (ScaleEndDetails details) {
                 updatePositions();
               },
@@ -221,8 +228,8 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
                 updatePositions();
               },
               panEnabled: true,
-              minScale: 1.5,
-              maxScale: 2.5,
+              minScale: 2,
+              maxScale: 3,
               child: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
@@ -237,28 +244,4 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
       ),
     );
   }
-}
-
-/// Updates default markers and polygons of [MapNotifier] by listening to the firebase data stream
-class MapDataWidget extends StatefulWidget {
-  final Stream<FirebaseData> firebaseDataStream;
-  final Widget child;
-  const MapDataWidget({
-    Key key,
-    @required this.firebaseDataStream,
-    @required this.child,
-  }) : super(key: key);
-
-  @override
-  _MapDataWidgetState createState() => _MapDataWidgetState();
-}
-
-class _MapDataWidgetState extends State<MapDataWidget> {
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => widget.child;
 }

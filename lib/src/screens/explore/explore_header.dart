@@ -64,7 +64,7 @@ class ExploreHeader extends StatelessWidget {
                   end: (24 + Sizes.hLogoHeight) / 12,
                 ).animate(animTween.animate(animation)),
                 child: Text(
-                  'Explore BGPS Garden',
+                  'Explore BGPS EcoGarden',
                   style: Theme.of(context).textTheme.headline4.copyWith(
                         height: Sizes.hHeadingHeight / 20,
                       ),

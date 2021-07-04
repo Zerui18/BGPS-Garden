@@ -89,6 +89,7 @@ class _HcGardenAppState extends State<HcGardenApp> {
                 ? darkThemeData.canvasColor
                 : themeData.canvasColor,
             child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'BGPS Garden',
               theme: themeNotifier.value ? darkThemeData : themeData,
               onGenerateRoute: (settings) {
@@ -99,14 +100,8 @@ class _HcGardenAppState extends State<HcGardenApp> {
                         begin: 1.0,
                         end: -1.0,
                       ));
-                      return MapDataWidget(
-                        firebaseDataStream: _stream,
-                        child: FadeTransition(
-                          opacity: fadeOut,
-                          child: MyHomePage(
-                            firstTime: _firstTime,
-                          ),
-                        ),
+                      return MyHomePage(
+                        firstTime: _firstTime,
                       );
                     },
                   );
@@ -128,6 +123,8 @@ class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
+
+_MyHomePageState homePage;
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
@@ -202,6 +199,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     super.initState();
+    homePage = this;
     _tabController = TabController(
       length: 2,
       vsync: this,
@@ -278,7 +276,6 @@ class _MyHomePageState extends State<MyHomePage>
         return Scaffold(
           resizeToAvoidBottomInset: false,
           drawer: SettingsDrawer(),
-          endDrawer: routesIsEmpty ? FilterDrawer() : null,
           body: child,
         );
       },

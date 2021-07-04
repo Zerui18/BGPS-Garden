@@ -245,7 +245,7 @@ class _OnboardingPageOne extends StatelessWidget {
             height: 216,
           ),
           Text(
-            'Welcome To\nBGPS Garden!',
+            'Welcome To\nBGPS EcoGarden!',
             style: Theme.of(context).textTheme.headline3.copyWith(
                   color: Theme.of(context).accentColor,
                 ),
@@ -297,7 +297,7 @@ class _OnboardingPageTwo extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  "You'll see it everytime you open BGPS Garden.",
+                  "You'll see it everytime you open BGPS EcoGarden.",
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -333,7 +333,7 @@ class _OnboardingPageSix extends StatelessWidget {
               height: 216,
             ),
             Text(
-              'Start your\BGPS Garden\njourney now!',
+              'Start your\BGPS EcoGarden\njourney now!',
               style: Theme.of(context).textTheme.headline3.copyWith(
                     color: Theme.of(context).accentColor,
                     fontSize: 26,

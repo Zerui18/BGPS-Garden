@@ -219,18 +219,18 @@ class _CustomBottomAppBarState extends State<CustomBottomAppBar>
                           ),
                         );
                       },
-                      child: Tooltip(
-                        message: 'Filter',
-                        preferBelow: false,
-                        child: IconButton(
-                          icon: const Icon(Icons.filter_list),
-                          onPressed: () {
-                            if (_isHome.value) {
-                              Scaffold.of(context).openEndDrawer();
-                            }
-                          },
-                        ),
-                      ),
+                      // child: Tooltip(
+                      //   message: 'Filter',
+                      //   preferBelow: false,
+                      //   child: IconButton(
+                      //     icon: const Icon(Icons.filter_list),
+                      //     onPressed: () {
+                      //       if (_isHome.value) {
+                      //         Scaffold.of(context).openEndDrawer();
+                      //       }
+                      //     },
+                      //   ),
+                      // ),
                     ),
                   ],
                 ),

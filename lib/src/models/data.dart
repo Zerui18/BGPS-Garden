@@ -124,6 +124,7 @@ class EntityLocation {
 
 class HistoricalData {
   final int id;
+  final String title;
   final String description;
   final String image;
   final String newImage;
@@ -133,6 +134,7 @@ class HistoricalData {
 
   const HistoricalData({
     this.id,
+    this.title,
     this.description,
     this.image,
     this.newImage,
@@ -144,7 +146,8 @@ class HistoricalData {
   factory HistoricalData.fromJson(dynamic key, dynamic data) {
     return HistoricalData(
       id: key,
-      description: data['description'],
+      title: data['title'] ?? '',
+      description: data['description'] ?? '',
       image: data['imageRef'] ?? '',
       newImage: data['newImageRef'] ?? '',
       name: data['name'] ?? Random.secure().nextDouble().toString(),

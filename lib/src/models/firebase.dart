@@ -8,15 +8,16 @@ class FirebaseData {
   final List<HistoricalData> historicalDataList;
   final List<AboutPageData> aboutPageDataList;
   final Set<Polygon> mapPolygons;
+  final List<dynamic> sectionPinLocations;
 
-  const FirebaseData({
-    this.entities,
-    this.sections,
-    this.sectionNames,
-    this.historicalDataList,
-    this.aboutPageDataList,
-    this.mapPolygons,
-  });
+  const FirebaseData(
+      {this.entities,
+      this.sections,
+      this.sectionNames,
+      this.historicalDataList,
+      this.aboutPageDataList,
+      this.mapPolygons,
+      this.sectionPinLocations});
 
   static Entity getEntity({
     @required BuildContext context,
@@ -28,8 +29,7 @@ class FirebaseData {
         context,
         listen: listen,
       ).entities[key.category][key.id];
-    }
-    catch (e) {
+    } catch (e) {
       print("entity error");
       print(Provider.of<FirebaseData>(
         context,
@@ -73,6 +73,7 @@ class FirebaseData {
     final List<HistoricalData> historicalDataList = [];
     final List<AboutPageData> aboutPageDataList = [];
     final Set<Polygon> mapPolygons = {};
+    final List<dynamic> pinPositions = [];
 
     // Adding entities
     entities.addEntities(
@@ -116,6 +117,7 @@ class FirebaseData {
       final key = SectionKey(id: sectionId);
       sections[key] = sectionData;
       sectionNames.add(section['name']);
+      pinPositions.add([section['pin'][0] + .0, section['pin'][1] + .0]);
     });
 
     // Add historical data
@@ -133,13 +135,13 @@ class FirebaseData {
     aboutPageDataList.sort((a, b) => a.id.compareTo(b.id));
 
     return FirebaseData(
-      entities: entities,
-      sections: sections,
-      sectionNames: sectionNames,
-      historicalDataList: historicalDataList,
-      aboutPageDataList: aboutPageDataList,
-      mapPolygons: mapPolygons,
-    );
+        entities: entities,
+        sections: sections,
+        sectionNames: sectionNames,
+        historicalDataList: historicalDataList,
+        aboutPageDataList: aboutPageDataList,
+        mapPolygons: mapPolygons,
+        sectionPinLocations: pinPositions);
   }
 }
 
