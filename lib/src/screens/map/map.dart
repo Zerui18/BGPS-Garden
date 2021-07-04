@@ -17,7 +17,7 @@ void syncLabels() {
       print(e);
     }
   }
-  new Timer(Duration(milliseconds: 200), () {
+  new Timer(Duration(milliseconds: 17), () {
     syncLabels();
   });
 }
@@ -59,15 +59,6 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
     }
   }
 
-  void syncLabelsInternal() {
-    setState(() {
-      for (int i = 0; i < pinLocations.length; i++) {
-        topStart[i] = containerKeys[i].globalPaintBounds.top;
-        leftStart[i] = containerKeys[i].globalPaintBounds.left;
-      }
-    });
-  }
-
   @override
   void initState() {
     mapWidget = this;
@@ -78,6 +69,7 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    periodicSyncLabels = false;
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -92,137 +84,114 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
     GlobalKey(),
     GlobalKey(),
   ];
-  List<double> topStart = List.filled(8, 0);
-  List<double> leftStart = List.filled(8, 0);
+  List<GlobalKey> pinKeys = [
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+  ];
   List<dynamic> locationActions = [];
   List<dynamic> pinLocations = [];
+  // List<String> sectionNames = [
+  //   "Desert Plants",
+  //   "Butterfly Garden",
+  //   "Native Plants",
+  //   "Fruit Trees",
+  //   "Ornamental Plants",
+  //   "Community Garden",
+  //   "Fern Garden",
+  //   "Herbs & Spices",
+  // ];
+  TransformationController _transformationController = TransformationController();
+  GlobalKey imageKey = GlobalKey();
+  double viewerScale = 0;
+
+  void syncLabelsInternal() {
+    setState(() {
+      viewerScale = _transformationController.value.getMaxScaleOnAxis();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<double> notifier = ValueNotifier(0);
+
     try {
-      pinLocations =
-          Provider.of<FirebaseData>(context, listen: false).sectionPinLocations;
+      pinLocations = Provider.of<FirebaseData>(context, listen: false).sectionPinLocations;
     } catch (err) {
       pinLocations = [];
     }
 
-    void updatePositions() {
-      setState(() {
-        for (int i = 0; i < pinLocations.length; i++) {
-          topStart[i] = containerKeys[i].globalPaintBounds.top;
-          leftStart[i] = containerKeys[i].globalPaintBounds.left;
-        }
-      });
-    }
-
-    List<Widget> stackChildren = [
-      Positioned(
-        top: MediaQuery.of(context).size.height * 0.05,
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.65,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.contain,
-                  image: AssetImage('assets/images/map.png'),
-                  alignment: Alignment.topCenter),
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-        ),
-      ),
-    ];
-
+    List<Widget> positioningBoxes = [];
     List<Widget> pins = [];
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    if (containerKeys.length > 0) {
-      for (int i = 0; i < pinLocations.length; i++) {
+    for (int i = 0; i < pinLocations.length; i++) {
+      if (imageKey.globalPaintBounds == null) break;
 
-        double correctionWidth = 1, correctionHeight = 1;
-        if (getDeviceType() == DeviceType.Tablet) {
-          if (MediaQuery.of(context).size.height < 1000) {
-            correctionWidth = 2;
-            correctionHeight = 1.8;
-          } else {
-            correctionWidth = 2 * 1.3;
-            correctionHeight = 1.8 * 1.13;
-          }
-        } else if (MediaQuery.of(context).size.height < 750) {
-          correctionWidth = 1.02;
-          correctionHeight = 1.15;
-        }
+      positioningBoxes.add(Positioned(
+        left: imageKey.globalPaintBounds.width * pinLocations[i][0],
+        top: imageKey.globalPaintBounds.height * pinLocations[i][1],
+        height: 20,
+        width: 20,
+        child: Container(
+          key: containerKeys[i],
+          // decoration: BoxDecoration(color: Colors.black),
+        ),
+      ),);
 
-        stackChildren.add(
-          Positioned(
-            left: pinLocations[i][0] * correctionWidth,
-            top: (0.05 * MediaQuery.of(context).size.height +
-                    pinLocations[i][1]) *
-                correctionHeight,
-            child: Container(
-              decoration: BoxDecoration(
-                  // color: Colors.black,
+      if (containerKeys[i].globalPaintBounds == null) continue;
+
+      pins.add(AnimatedBuilder(
+        animation: notifier,
+        builder: (BuildContext context, Widget widget) {
+          return Positioned(
+            left:
+              containerKeys[i].globalPaintBounds.left
+              - (pinKeys[i].globalPaintBounds == null ? 0 : pinKeys[i].globalPaintBounds.width / 2),
+            top:
+              containerKeys[i].globalPaintBounds.top
+              - (40 / viewerScale)
+              - (pinKeys[i].globalPaintBounds == null ? 0 : pinKeys[i].globalPaintBounds.height / 2),
+            key: pinKeys[i],
+            child: InkWell(
+              onTap: () async {
+                final sectionKey = SectionKey(id: i);
+                context.provide<AppNotifier>(listen: false).pop(context);
+                await Future.delayed(const Duration(milliseconds: 300), () {});
+                context.provide<AppNotifier>(listen: false).push(
+                  context: context,
+                  routeInfo: RouteInfo(
+                    name: sectionNames[i],
+                    dataKey: sectionKey,
+                    route: CrossFadePageRoute(
+                      builder: (context) {
+                        return SectionDetailsPage(
+                          sectionKey: sectionKey,
+                        );
+                      },
+                    ),
                   ),
-              key: containerKeys[i],
-              height: 30,
-              width: 30,
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(3)),
+                  color: Color.fromARGB(192, 255, 255, 255),
+                ),
+                child: Text(sectionNames[i], style: TextStyle(color: Colors.black,),),
+              ),
             ),
-          ),
-        );
-
-        pins.add(
-          Positioned(
-              top: (topStart[i] == null) ? 0 : (topStart[i] * 1.0) - 40,
-              left: (leftStart[i] == null) ? 0 : leftStart[i] * 1.0,
-              child: InkWell(
-                onTap: () async {
-                  final sectionKey = SectionKey(id: i);
-                  context.provide<AppNotifier>(listen: false).pop(context);
-                  await Future.delayed(
-                      const Duration(milliseconds: 300), () {});
-                  context.provide<AppNotifier>(listen: false).push(
-                        context: context,
-                        routeInfo: RouteInfo(
-                          name: sectionNames[i],
-                          dataKey: sectionKey,
-                          route: CrossFadePageRoute(
-                            builder: (context) {
-                              return SectionDetailsPage(
-                                sectionKey: sectionKey,
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                },
-                child: Container(
-                    height: 40,
-                    child: Row(
-                      children: [
-                        // Image(image: AssetImage("assets/images/pin.png")),
-                        Container(
-                          padding: EdgeInsets.all(4.0),
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0)),
-                            color: isDark
-                                ? Color.fromARGB(200, 0, 0, 0)
-                                : Color.fromARGB(200, 255, 255, 255),
-                          ),
-                          child: Text(sectionNames[i],
-                              style: TextStyle(fontSize: 12.0)),
-                        ),
-                      ],
-                    )),
-              )),
-        );
-      }
-      periodicSyncLabels = true;
-    } else {
-      setState(() {
-        for (int i = 0; i < pinLocations.length; i++) {
-          containerKeys.add(GlobalKey());
+          );
         }
-      });
+      ),);
     }
+
+    periodicSyncLabels = true;
 
     return CustomAnimatedSwitcher(
       fadeIn: true,
@@ -230,27 +199,36 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
         child: Stack(
           children: [
             InteractiveViewer(
-              onInteractionStart: (ScaleStartDetails details) {
-                updatePositions();
+              onInteractionUpdate: (ScaleUpdateDetails details) {
+                notifier.value = containerKeys[0].globalPaintBounds.left;
               },
               onInteractionEnd: (ScaleEndDetails details) {
-                updatePositions();
+                notifier.value = containerKeys[0].globalPaintBounds.left;
               },
-              onInteractionUpdate: (ScaleUpdateDetails details) {
-                updatePositions();
-              },
-              panEnabled: true,
-              minScale: 2,
-              maxScale: 3,
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Stack(
-                  children: stackChildren,
-                ),
-              ),
+              minScale: 1,
+              maxScale: 2.5,
+              constrained: false,
+              scaleEnabled: true,
+              child: Stack(
+                children: [
+                  Container(
+                    width: 800,
+                    height: 1000,
+                  ),
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    width: 800,
+                    key: imageKey,
+                    child: Image(
+                      image: AssetImage("assets/images/map.png"),
+                    ),
+                  ),
+                  ...positioningBoxes,
+                ],
+              )
             ),
-            ...pins
+            ...pins,
           ],
         ),
       ),
