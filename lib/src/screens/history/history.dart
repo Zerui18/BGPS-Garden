@@ -134,6 +134,19 @@ class _HistoryPageState extends State<HistoryPage>
                                     Theme.of(context).dividerColor,
                               ),
                             ),
+                          if (historicalData[i].title.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(24, 34, 24, 0),
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    historicalData[i].title,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )),
+                            ),
                           if (historicalData[i].description.isNotEmpty)
                             Padding(
                               padding:

@@ -64,14 +64,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
                               themeNotifier.value = !themeNotifier.value,
                         );
                       },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 28, 16, 12),
-                      child: Text(
-                        'Map Type',
-                        style: Theme.of(context).textTheme.subtitle,
-                      ),
-                    ),
+                    )
                   ],
                 ),
                 const SizedBox.shrink(),

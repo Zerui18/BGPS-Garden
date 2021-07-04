@@ -60,8 +60,7 @@ class AppNotifier extends ChangeNotifier {
 
   /// Pop the current screen in the bottom sheet
   void pop(BuildContext context) {
-    if (routes.length == 0) return;
-    routes.removeLast();
+    if (routes.isNotEmpty) routes.removeLast();
     if (routes.isEmpty) {
       changeState(
         context: context,
@@ -73,9 +72,10 @@ class AppNotifier extends ChangeNotifier {
         routeInfo: routes.last,
       );
     }
-    // print('After pop: $routes');
+    print('pop');
     // Ensure that routes and navigator stack remains in sync even if there is an error, by resetting when going back to home
     if (routes.isEmpty) {
+      print('going home');
       navigatorKey.currentState.popUntil((route) => route.isFirst);
     } else {
       navigatorKey.currentState.pop();
@@ -113,7 +113,6 @@ class AppNotifier extends ChangeNotifier {
       routeInfo: routeInfo,
       disableDragging: disableDragging,
     );
-    // print('After push: $routes');
     return navigatorKey.currentState.push(routeInfo.route);
   }
 
