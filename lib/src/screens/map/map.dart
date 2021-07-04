@@ -151,11 +151,14 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
           return Positioned(
             left:
               containerKeys[i].globalPaintBounds.left
-              - (pinKeys[i].globalPaintBounds == null ? 0 : pinKeys[i].globalPaintBounds.width / 2),
+              - (pinKeys[i].globalPaintBounds == null ? 0 : pinKeys[i].globalPaintBounds.width / 2)
+              ,
             top:
               containerKeys[i].globalPaintBounds.top
               - (40 / viewerScale)
-              - (pinKeys[i].globalPaintBounds == null ? 0 : pinKeys[i].globalPaintBounds.height / 2),
+              - (pinKeys[i].globalPaintBounds == null ? 0 : pinKeys[i].globalPaintBounds.height / 2)
+              - 24 // only used if there are pin icons
+              ,
             key: pinKeys[i],
             child: InkWell(
               onTap: () async {
@@ -177,13 +180,32 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
                   ),
                 );
               },
-              child: Container(
-                padding: EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(3)),
-                  color: Color.fromARGB(192, 255, 255, 255),
-                ),
-                child: Text(sectionNames[i], style: TextStyle(color: Colors.black,),),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(128, 128, 128, 128),
+                          blurRadius: 4.0, // soften the shadow
+                          // spreadRadius: 7.0, //extend the shadow
+                          offset: Offset(
+                            2.0, // Move to right 10  horizontally
+                            2.0, // Move to bottom 5 Vertically
+                          ),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.all(Radius.circular(3)),
+                      color: Color.fromARGB(192, 255, 255, 255),
+                    ),
+                    child: Text(sectionNames[i], style: TextStyle(color: Colors.black,),),
+                  ),
+                  Image(
+                    image: AssetImage("assets/images/pin.png"),
+                    height: 54,
+                  ),
+                ],
               ),
             ),
           );
