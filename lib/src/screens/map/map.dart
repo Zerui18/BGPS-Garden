@@ -1,5 +1,17 @@
 import 'package:bgps_garden/src/library.dart';
 
+bool periodicSyncLabels = false;
+
+void syncLabels() {
+  if (periodicSyncLabels) {
+    try { _MapWidgetState.mapWidget.syncLabelsInternal(); }
+    catch (e) { print(e); }
+  }
+  new Timer(Duration(milliseconds: 200), () {
+    syncLabels();
+  });
+}
+
 extension GlobalKeyExtension on GlobalKey {
   Rect get globalPaintBounds {
     final renderObject = currentContext?.findRenderObject();
@@ -21,6 +33,8 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
+  static var mapWidget;
+
   void rebuild() {
     setState(() {});
   }
@@ -35,8 +49,19 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
     }
   }
 
+  void syncLabelsInternal() {
+    setState(() {
+      for (int i = 0; i < pinLocations.length; i++) {
+        topStart[i] = containerKeys[i].globalPaintBounds.top;
+        leftStart[i] = containerKeys[i].globalPaintBounds.left;
+      }
+    });
+  }
+
   @override
   void initState() {
+    mapWidget = this;
+    syncLabels();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -175,7 +200,9 @@ class _MapWidgetState extends State<MapWidget> with WidgetsBindingObserver {
               )),
         );
       }
-    } else {
+      periodicSyncLabels = true;
+    }
+    else {
       setState(() {
         for (int i = 0; i < pinLocations.length; i++) {
           containerKeys.add(GlobalKey());
